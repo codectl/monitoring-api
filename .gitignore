@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+
+# IDE configurations
+.idea/
+
+# Environments
+env/
+.env
+.env.*
+
+# Database files
+*.db
+*.db-journal
+
+# Logs
+*.log*
+
+# exclude hidden kustomization files.
+.kustomization/**/.*.yaml
