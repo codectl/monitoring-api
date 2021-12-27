@@ -5,7 +5,7 @@ from flask import Flask
 from src.settings.config import config_by_name
 
 
-def create_app(config_name=None):
+def create_app(config_name='default'):
     """Create a new app."""
 
     # define the WSGI application object
