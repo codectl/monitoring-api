@@ -39,9 +39,14 @@ def setup_app(app):
     # initialize root blueprint
     api_bp = Blueprint('api', __name__, url_prefix=app.config['APPLICATION_CONTEXT'])
 
+    # link api to blueprint
+    api.init_app(api_bp)
+
     # register api blueprint
     app.register_blueprint(api_bp)
 
+    # link swagger to app
+    swagger.init_app(app)
+
     # register cli commands
     app.cli.add_command(test_command)
-

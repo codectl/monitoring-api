@@ -14,6 +14,29 @@ class BaseConfig:
     # Application root context
     APPLICATION_CONTEXT = env.str('APPLICATION_CONTEXT', '/')
 
+    # Swagger properties
+    OPENAPI = env('OPENAPI', '3.0.3')
+    SWAGGER = {
+        'openapi': OPENAPI,
+        'specs': [
+            {
+                'endpoint': 'swagger',
+                'route': APPLICATION_CONTEXT + '/swagger.json',
+                'rule_filter': lambda rule: True,
+                'model_filter': lambda tag: True
+            }
+        ],
+
+        # where to find the docs (ensure trailing slash)
+        'specs_route': APPLICATION_CONTEXT + '/',
+
+        # swagger static files
+        'static_url_path': APPLICATION_CONTEXT + '/flasgger_static',
+
+        # hide the Swagger top bar
+        'hide_top_bar': True
+    }
+
 
 class ProductionConfig(BaseConfig):
     ENV = 'production'
@@ -27,7 +50,7 @@ class DevelopmentConfig(BaseConfig):
 
 
 class TestingConfig(BaseConfig):
-    ENV = 'test'
+    ENV = 'testing'
     TESTING = True
     LOG_LEVEL = 'DEBUG'
 
