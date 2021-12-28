@@ -1,4 +1,7 @@
 click~=8.0.3
 coverage~=6.2
+flasgger~=0.9.5
 Flask~=2.0.2
+Flask-RESTful
+Flask-SQLAlchemy
 python-dotenv~=0.19.2
