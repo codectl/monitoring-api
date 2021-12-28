@@ -1,4 +1,4 @@
-import os
+from src.settings.env import env
 
 
 class BaseConfig:
@@ -8,8 +8,11 @@ class BaseConfig:
     TESTING = False
 
     # Define host & port
-    # HOST = env('FLASK_RUN_HOST', '0.0.0.0')
-    # PORT = env.int('FLASK_RUN_PORT', 5000)
+    HOST = env.str('FLASK_RUN_HOST', '0.0.0.0')
+    PORT = env.int('FLASK_RUN_PORT', 5000)
+
+    # Application root context
+    APPLICATION_CONTEXT = env.str('APPLICATION_CONTEXT', '/')
 
 
 class ProductionConfig(BaseConfig):
