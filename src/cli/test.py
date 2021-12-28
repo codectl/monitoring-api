@@ -1,25 +1,24 @@
 import unittest
 
-import coverage
+import coverage as cv
 import click
 
 
-@click.command()
+@click.command(name='test')
 @click.option(
     '--coverage/--no-coverage',
     default=False,
     help='Run tests under code coverage.'
 )
-def test_command(cvg):
+def test_command(coverage):
     """Run test suite."""
-    suite = unittest.TestLoader().discover(start_dir='tests')
+    suite = unittest.TestLoader().discover(start_dir='src/tests')
     runner = unittest.TextTestRunner(verbosity=2)
 
-    if cvg:
-        cov = coverage.Coverage()
-        cov.start()
-        runner.run(suite)
-        cov.stop()
+    cov = cv.Coverage()
+    cov.start()
+    runner.run(suite)
+    cov.stop()
+
+    if coverage:
         cov.report()
-    else:
-        runner.run(suite)
