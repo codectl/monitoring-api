@@ -1,7 +1,7 @@
 import os
 
 from flasgger import Swagger
-from flask import Blueprint, Flask
+from flask import Blueprint, Flask, redirect, url_for
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 
@@ -50,3 +50,6 @@ def setup_app(app):
 
     # register cli commands
     app.cli.add_command(test_command)
+
+    # Redirect root path to context root
+    app.add_url_rule('/', 'index', lambda: redirect(url_for('flasgger.apidocs')))

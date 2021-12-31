@@ -20,15 +20,17 @@ class TestApp(unittest.TestCase):
         """Can create an app."""
         self.assertIsNotNone(self.app)
 
-    def test_redirect_to_application_context(self):
+    def test_redirect_root_to_application_context(self):
         """App has an application context."""
-        app = create_app()
-        client = app.test_client()
+        response = self.client.get('/')
+        self.assertEquals(response.status_code, 302)
 
-        response = client.get('/')
-
-        print(1)
-        print(response.location)
-
+        response = self.client.get('/', follow_redirects=True)
+        request = response.request
+        print()
         self.assertEquals(response.status_code, 200)
-        self.assertEquals(response.location, app.config['APPLICATION_CONTEXT'])
+        self.assertEquals(request.path.rstrip('/'), self.app.config['APPLICATION_CONTEXT'])
+
+    def test_swagger_apidocs(self):
+        """App provides swagger specs."""
+        response = self.client.get('/')
