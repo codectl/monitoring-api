@@ -1,0 +1,14 @@
+---
+openapi: "{OPENAPI}"
+info:
+  title: Monitoring Service
+  description': A service responsible for providing monitoring data.
+  version: "{VERSION}"
+
+servers:
+  - url: "{APPLICATION_CONTEXT}"
+    description: "{ENV}"
+
+tags:
+  - name: health-checks
+    description: All operations involving health-checks

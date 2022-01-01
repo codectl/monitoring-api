@@ -1,3 +1,9 @@
+import os
+
+import flasgger
+import yaml
+
+from src import __version__
 from src.settings.env import env
 
 
@@ -7,7 +13,7 @@ class BaseConfig:
     DEBUG = False
     TESTING = False
 
-    # Define host & port
+    ENV = env.str('FLASK_ENV')
     HOST = env.str('FLASK_RUN_HOST', '0.0.0.0')
     PORT = env.int('FLASK_RUN_PORT', 5000)
 
@@ -36,6 +42,16 @@ class BaseConfig:
         # hide the Swagger top bar
         'hide_top_bar': True
     }
+
+    # OpenAPI 3 properties
+    OPENAPI_SPEC = yaml.safe_load(flasgger.utils.load_from_file(
+        os.path.join('src', 'settings', 'oas3.yaml')
+    ).format(**{
+        'OPENAPI': OPENAPI,
+        'APPLICATION_CONTEXT': APPLICATION_CONTEXT,
+        'ENV': ENV,
+        'VERSION': __version__
+    }))
 
 
 class ProductionConfig(BaseConfig):
