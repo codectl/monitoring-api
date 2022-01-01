@@ -27,7 +27,6 @@ class TestApp(unittest.TestCase):
 
         response = self.client.get('/', follow_redirects=True)
         request = response.request
-        print()
         self.assertEquals(response.status_code, 200)
         self.assertEquals(request.path.rstrip('/'), self.app.config['APPLICATION_CONTEXT'])
 

@@ -1,6 +1,8 @@
 import os
 
-from flasgger import Swagger
+import flasgger
+from apispec import APISpec
+from apispec.ext.marshmallow import MarshmallowPlugin
 from flask import Blueprint, Flask, redirect, url_for
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
@@ -8,15 +10,11 @@ from flask_sqlalchemy import SQLAlchemy
 from src.cli.test import test_command
 from src.settings.config import config_by_name
 
-
 # SQLite database
 db = SQLAlchemy()
 
 # initialize Flask Restful
 api = Api()
-
-# initialize swagger
-swagger = Swagger()
 
 
 def create_app(config_name='default'):
@@ -35,21 +33,37 @@ def create_app(config_name='default'):
 
 
 def setup_app(app):
-
     # initialize root blueprint
     api_bp = Blueprint('api', __name__, url_prefix=app.config['APPLICATION_CONTEXT'])
 
     # link api to blueprint
     api.init_app(api_bp)
 
+    import src.resources.health_checks
+
     # register api blueprint
     app.register_blueprint(api_bp)
 
-    # link swagger to app
-    swagger.init_app(app)
+    # Redirect root path to context root
+    app.add_url_rule('/', 'index', lambda: redirect(url_for('flasgger.apidocs')))
+
+    # configure OAS3
+    flasgger.Swagger(
+        app=app,
+        config=app.config['SWAGGER'],
+        template=flasgger.apispec_to_template(
+            app=app,
+            spec=APISpec(
+                title=app.config['OPENAPI_SPEC']['info']['title'],
+                version=app.config['OPENAPI_SPEC']['info']['version'],
+                openapi_version=app.config['OPENAPI_SPEC']['openapi'],
+                plugins=(MarshmallowPlugin(),),
+                basePath=app.config['APPLICATION_CONTEXT'],
+                **app.config['OPENAPI_SPEC']
+            ),
+        ),
+        merge=True
+    )
 
     # register cli commands
     app.cli.add_command(test_command)
-
-    # Redirect root path to context root
-    app.add_url_rule('/', 'index', lambda: redirect(url_for('flasgger.apidocs')))
