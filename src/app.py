@@ -10,6 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 from src.cli.test import test_command
 from src.settings.config import config_by_name
 
+
 # SQLite database
 db = SQLAlchemy()
 
@@ -38,8 +39,6 @@ def setup_app(app):
 
     # link api to blueprint
     api.init_app(api_bp)
-
-    import src.resources.health_checks
 
     # register api blueprint
     app.register_blueprint(api_bp)
