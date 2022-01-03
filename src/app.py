@@ -39,19 +39,29 @@ def setup_app(app):
     # link api to blueprint
     api.init_app(api_bp)
 
+    import src.resources.health_checks
+
     # register api blueprint
     app.register_blueprint(api_bp)
 
     # Redirect root path to context root
     app.add_url_rule('/', 'index', lambda: redirect(url_for('flasgger.apidocs')))
 
-    import src.resources.health_checks
-
-    # configure swagger
+    # configure OAS3
     flasgger.Swagger(
         app=app,
         config=app.config['SWAGGER'],
-        template=app.config['OPENAPI_SPEC'],
+        template=flasgger.apispec_to_template(
+            app=app,
+            spec=APISpec(
+                title=app.config['OPENAPI_SPEC']['info']['title'],
+                version=app.config['OPENAPI_SPEC']['info']['version'],
+                openapi_version=app.config['OPENAPI_SPEC']['openapi'],
+                plugins=(MarshmallowPlugin(),),
+                basePath=app.config['APPLICATION_CONTEXT'],
+                **app.config['OPENAPI_SPEC']
+            ),
+        ),
         merge=True
     )
 
