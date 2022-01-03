@@ -30,6 +30,3 @@ class TestHealthCheckAPI(unittest.TestCase):
         """GET request that cannot retrieve an health check by id."""
         pass
 
-
-if __name__ == '__main__':
-    unittest.main()

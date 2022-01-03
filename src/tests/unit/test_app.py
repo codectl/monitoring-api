@@ -9,6 +9,7 @@ class TestApp(unittest.TestCase):
         # create app for testing
         self.app = create_app(config_name='testing')
         self.client = self.app.test_client()
+        self.ctx = self.app.config['APPLICATION_CONTEXT']
 
         # self.bright = Bright(version='latest')
         # bright.health_checks()
@@ -28,8 +29,10 @@ class TestApp(unittest.TestCase):
         response = self.client.get('/', follow_redirects=True)
         request = response.request
         self.assertEquals(response.status_code, 200)
-        self.assertEquals(request.path.rstrip('/'), self.app.config['APPLICATION_CONTEXT'])
+        self.assertEquals(request.path.rstrip('/'), self.ctx)
 
     def test_swagger_apidocs(self):
         """App provides swagger specs."""
-        response = self.client.get('/')
+        response = self.client.get(f"{self.ctx}/swagger.json")
+
+        self.assertEquals(response.status_code, 200)
