@@ -22,11 +22,10 @@ class HealthChecks(Resource):
                         }
                     },
                 }
-            },
-            400: {'$ref': '#/components/responses/BadRequest'}
+            }
         },
     })
     def get(self):
         """Get available health checks."""
 
-        return None
+        return []
