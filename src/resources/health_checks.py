@@ -2,6 +2,7 @@ import flasgger
 from flask_restful import Resource
 
 from src.app import api
+from src.api.bright import Bright
 
 
 @api.resource('/health-checks', endpoint='health_checks')
@@ -28,4 +29,4 @@ class HealthChecks(Resource):
     def get(self):
         """Get available health checks."""
 
-        return []
+        pass
