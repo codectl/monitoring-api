@@ -11,9 +11,6 @@ class TestApp(unittest.TestCase):
         self.client = self.app.test_client()
         self.ctx = self.app.config['APPLICATION_CONTEXT']
 
-        # self.bright = Bright(version='latest')
-        # bright.health_checks()
-
     def tearDown(self):
         pass
 
