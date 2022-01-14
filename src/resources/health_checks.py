@@ -19,7 +19,7 @@ class HealthChecks(Resource):
                         'schema': {
                             'type': 'array',
                             'items': {
-                                '$ref': '#/components/schemas/Issue'
+                                '$ref': '#/components/schemas/HealthCheck'
                             }
                         }
                     },
