@@ -123,7 +123,7 @@ class BrightAPI:
 
     def __init__(
             self,
-            host,
+            host=None,
             port=None,
             cert_auth=None,
             verify=False,
@@ -157,3 +157,6 @@ class BrightAPI:
             return Bright8
         else:
             raise ValueError('Unsupported version')
+
+    def __getattr__(self, name):
+        return self.instance.__getattribute__(name)

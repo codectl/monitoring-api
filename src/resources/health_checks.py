@@ -2,7 +2,8 @@ import flasgger
 from flask_restful import Resource
 
 from src.app import api
-from src.api.bright import Bright
+from src.api.bright import BrightAPI
+from src.serialization.serlializers.bright.HealthCheck import HealthCheckSchema
 
 
 @api.resource('/health-checks', endpoint='health_checks')
@@ -29,4 +30,6 @@ class HealthChecks(Resource):
     def get(self):
         """Get available health checks."""
 
-        pass
+        health_checks = BrightAPI().health_checks()
+
+        return HealthCheckSchema(many=True).dump(health_checks)
