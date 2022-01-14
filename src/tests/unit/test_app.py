@@ -6,7 +6,6 @@ from src.app import create_app
 class TestApp(unittest.TestCase):
 
     def setUp(self):
-        # create app for testing
         self.app = create_app(config_name='testing')
         self.client = self.app.test_client()
         self.ctx = self.app.config['APPLICATION_CONTEXT']
