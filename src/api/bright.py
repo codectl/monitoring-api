@@ -4,6 +4,8 @@ import os
 import requests
 from flask import current_app
 
+from src.models.bright import HealthCheck
+
 
 class BrightBase(abc.ABC):
     """Base class for Bright API."""
