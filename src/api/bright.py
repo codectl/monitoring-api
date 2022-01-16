@@ -50,6 +50,7 @@ class BrightBase(abc.ABC):
     def _create_cert_session(self, cert_auth):
         self._session.cert = cert_auth
 
+    @staticmethod
     def version(self):
         url = "{0}/{1}".format(self.url, 'json')
         params = {
@@ -66,6 +67,13 @@ class BrightBase(abc.ABC):
     @abc.abstractmethod
     def measurable(self, name):
         pass
+
+
+class Bright(BrightBase):
+    """Generic Bright implementation."""
+
+    def measurable(self, name):
+        raise NotImplementedError('use a specific Bright version')
 
 
 class Bright7(BrightBase):
@@ -146,7 +154,7 @@ class BrightAPI:
                 key = os.path.join(instance_path, key)
             cert_auth = (cert, key)
 
-        version = version or BrightBase(url=url).version()
+        version = version or Bright(url=url).version()
         self.instance = self.factory(version)(
             url=url,
             cert_auth=cert_auth,
