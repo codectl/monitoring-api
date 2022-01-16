@@ -14,11 +14,17 @@ class BaseConfig:
     TESTING = False
 
     ENV = env.str('FLASK_ENV')
-    HOST = env.str('FLASK_RUN_HOST', '0.0.0.0')
+    HOST = env.str('FLASK_RUN_HOST', 'localhost')
     PORT = env.int('FLASK_RUN_PORT', 5000)
 
     # Application root context
     APPLICATION_CONTEXT = env.str('APPLICATION_CONTEXT', '/')
+
+    # Bright Computing properties
+    BRIGHT_COMPUTING_HOST = env.str('BRIGHT_COMPUTING_HOST', 'localhost')
+    BRIGHT_COMPUTING_PORT = env.int('BRIGHT_COMPUTING_PORT', 8080)
+    BRIGHT_COMPUTING_CERT_PATH = env.str('BRIGHT_COMPUTING_CERT_PATH', '/etc/ssl/bright/cert.pem')
+    BRIGHT_COMPUTING_KEY_PATH = env.str('BRIGHT_COMPUTING_KEY_PATH', '/etc/ssl/bright/cert.key')
 
     # Swagger properties
     OPENAPI = env('OPENAPI', '3.0.3')
