@@ -20,6 +20,12 @@ class BaseConfig:
     # Application root context
     APPLICATION_CONTEXT = env.str('APPLICATION_CONTEXT', '/')
 
+    # Bright Computing properties
+    BRIGHT_COMPUTING_HOST = env.str('BRIGHT_COMPUTING_HOST', 'localhost')
+    BRIGHT_COMPUTING_PORT = env.int('BRIGHT_COMPUTING_PORT', 8080)
+    BRIGHT_COMPUTING_CERT_PATH = env.str('BRIGHT_COMPUTING_CERT_PATH', '/etc/ssl/bright/cert.pem')
+    BRIGHT_COMPUTING_KEY_PATH = env.str('BRIGHT_COMPUTING_KEY_PATH', '/etc/ssl/bright/cert.key')
+
     # Swagger properties
     OPENAPI = env('OPENAPI', '3.0.3')
     SWAGGER = {
