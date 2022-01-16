@@ -136,6 +136,12 @@ class BrightAPI:
         if not cert_auth:
             cert = current_app.config['BRIGHT_COMPUTING_CERT_PATH']
             key = current_app.config['BRIGHT_COMPUTING_KEY_PATH']
+
+            # handle relative paths
+            if not os.path.isabs(cert) and not os.path.isabs(key):
+                instance_path = os.path.dirname(current_app.instance_path)
+                cert = os.path.join(instance_path, cert)
+                key = os.path.join(instance_path, key)
             cert_auth = (cert, key)
 
         version = version or BrightBase(url=url).version()
