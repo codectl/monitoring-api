@@ -21,8 +21,8 @@ class BrightBase(abc.ABC):
             session=None,
             basic_auth=None,
             cert_auth=None,
-            version=None,
-            verify=True
+            verify=True,
+            timeout=5
     ):
         """
         :param session: an already existing session session.
@@ -30,6 +30,8 @@ class BrightBase(abc.ABC):
         authentication.
         :param cert_auth: a tuple of cert and key to use when establishing a session. The pair is used for both
         authentication and encryption.
+        :param verify: check whether verify SSL connection
+        :param timeout: how much time until connection is dropped, in seconds
         """
         self.url = url
         if session is None:
@@ -41,8 +43,8 @@ class BrightBase(abc.ABC):
         elif cert_auth is not None:
             self._create_cert_session(cert_auth)
         self._session.headers.update(self.default_headers)
-        self.version = version
         self.verify = verify
+        self.timeout = timeout
 
     def _create_basic_session(self, basic_auth):
         self._session.auth = basic_auth
@@ -50,7 +52,7 @@ class BrightBase(abc.ABC):
     def _create_cert_session(self, cert_auth):
         self._session.cert = cert_auth
 
-    @staticmethod
+    @property
     def version(self):
         url = "{0}/{1}".format(self.url, 'json')
         params = {
@@ -60,7 +62,8 @@ class BrightBase(abc.ABC):
         response = self._session.post(
             url=url,
             json=params,
-            verify=self.verify
+            verify=self.verify,
+            timeout=self.timeout
         ).json()
         return response.get('cmVersion')
 
@@ -92,7 +95,8 @@ class Bright7(BrightBase):
         return self._session.post(
             url=url,
             json=params,
-            verify=self.verify
+            verify=self.verify,
+            timeout=self.timeout
         ).json() or {}
 
     def measurable(self, name):
@@ -105,7 +109,8 @@ class Bright7(BrightBase):
         return self._session.post(
             url=url,
             json=params,
-            verify=self.verify
+            verify=self.verify,
+            timeout=self.timeout
         ).json() or {}
 
 
@@ -125,7 +130,8 @@ class Bright8(BrightBase):
         return self._session.post(
             url,
             json=params,
-            verify=self.verify
+            verify=self.verify,
+            timeout=self.timeout
         ).json() or {}
 
 
@@ -136,8 +142,8 @@ class BrightAPI:
             host=None,
             port=None,
             cert_auth=None,
-            verify=False,
-            version=None
+            version=None,
+            **kwargs
     ):
         host = host or current_app.config['BRIGHT_COMPUTING_HOST']
         port = port or current_app.config['BRIGHT_COMPUTING_PORT']
@@ -154,11 +160,11 @@ class BrightAPI:
                 key = os.path.join(instance_path, key)
             cert_auth = (cert, key)
 
-        version = version or Bright(url=url).version()
+        version = version or Bright(url=url).version
         self.instance = self.factory(version)(
             url=url,
             cert_auth=cert_auth,
-            verify=verify
+            **kwargs
         )
 
     @staticmethod
