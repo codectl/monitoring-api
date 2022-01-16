@@ -9,6 +9,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 from src.cli.test import test_command
 from src.settings.config import config_by_name
+from src.serialization.serlializers.http import HttpErrorSchema
+from src.serialization.serlializers.bright import HealthCheckSchema
 
 
 # SQLite database
@@ -34,6 +36,7 @@ def create_app(config_name='default'):
 
 
 def setup_app(app):
+
     # initialize root blueprint
     api_bp = Blueprint('api', __name__, url_prefix=app.config['APPLICATION_CONTEXT'])
 
@@ -60,6 +63,10 @@ def setup_app(app):
                 basePath=app.config['APPLICATION_CONTEXT'],
                 **app.config['OPENAPI_SPEC']
             ),
+            definitions=[  # schemas
+                HttpErrorSchema,
+                HealthCheckSchema
+            ]
         ),
         merge=True
     )
