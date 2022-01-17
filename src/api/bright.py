@@ -160,7 +160,7 @@ class BrightAPI:
                 key = os.path.join(instance_path, key)
             cert_auth = (cert, key)
 
-        version = version or Bright(url=url).version
+        version = version or Bright(url=url, cert_auth=cert_auth).version
         self.instance = self.factory(version)(
             url=url,
             cert_auth=cert_auth,
