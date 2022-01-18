@@ -138,7 +138,7 @@ class Bright8(BrightBase):
     def latest_measurable_status(self, measurable, entity=None):
         params = {
             'measurable': measurable,
-            'entity': entity
+            **({'entity': entity} if entity is not None else {})
         }
 
         url = f"{self.base}/monitoring/latest?{urlencode(params)}"
