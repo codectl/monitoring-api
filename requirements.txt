@@ -10,3 +10,4 @@ Flask-SQLAlchemy
 marshmallow~=3.14.1
 PyYAML~=6.0
 requests~=2.27.1
+urllib3~=1.26.7
