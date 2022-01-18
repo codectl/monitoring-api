@@ -55,13 +55,13 @@ class BrightBase(abc.ABC):
 
     @property
     def version(self):
-        url = "{0}/{1}".format(self.url, 'json')
+        base = "{0}/{1}".format(self.url, 'json')
         params = {
             'service': 'cmmain',
             'call': 'getVersion',
         }
         response = self._session.post(
-            url=url,
+            url=base,
             json=params,
             verify=self.verify,
             timeout=self.timeout
@@ -84,31 +84,29 @@ class Bright7(BrightBase):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.url = "{0}/{1}".format(self.url, 'json')
+        self.base = "{0}/{1}".format(self.url, 'json')
 
     def entity(self, name):
-        url = "{0}/{1}".format(self.url, 'json')
         params = {
             'service': 'cmdevice',
             'call': 'getDevice',
             'arg': name
         }
         return self._session.post(
-            url=url,
+            url=self.base,
             json=params,
             verify=self.verify,
             timeout=self.timeout
         ).json() or {}
 
     def measurable(self, name):
-        url = "{0}/{1}".format(self.url, 'json')
         params = {
             'service': 'cmmon',
             'call': 'getHealthcheck',
             'arg': name
         }
         return self._session.post(
-            url=url,
+            url=self.base,
             json=params,
             verify=self.verify,
             timeout=self.timeout
@@ -119,17 +117,17 @@ class Bright8(BrightBase):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.url = "{0}/{1}/{2}".format(self.url, 'rest', 'v1')
+        self.base = "{0}/{1}/{2}".format(self.url, 'rest', 'v1')
 
     def measurable(self, name):
-        url = "{0}/{1}".format(self.url, 'json')
+        base = "{0}/{1}".format(self.url, 'json')
         params = {
             'service': 'cmmon',
             'call': 'getMonitoringMeasurable',
             'arg': name
         }
         return self._session.post(
-            url,
+            url=base,
             json=params,
             verify=self.verify,
             timeout=self.timeout
@@ -142,13 +140,14 @@ class BrightAPI:
             self,
             host=None,
             port=None,
+            protocol='https',
             cert_auth=None,
             version=None,
             **kwargs
     ):
         host = host or current_app.config['BRIGHT_COMPUTING_HOST']
         port = port or current_app.config['BRIGHT_COMPUTING_PORT']
-        url = f"https://{host}:{port}"
+        url = f"{protocol}://{host}:{port}"
 
         if not cert_auth:
             cert = current_app.config['BRIGHT_COMPUTING_CERT_PATH']
