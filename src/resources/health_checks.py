@@ -24,6 +24,6 @@ class HealthChecks(Resource):
                             items:
                                 $ref: '#/components/schemas/HealthCheck'
         """
-        health_checks = BrightAPI().health_checks()
+        health_checks = BrightAPI(verify=False).health_checks()
 
         return HealthCheckSchema(many=True).dump(health_checks)

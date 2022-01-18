@@ -1,5 +1,6 @@
 import abc
 import os
+import typing
 
 import requests
 from flask import current_app
@@ -160,7 +161,7 @@ class BrightAPI:
                 key = os.path.join(instance_path, key)
             cert_auth = (cert, key)
 
-        version = version or Bright(url=url, cert_auth=cert_auth).version
+        version = version or Bright(url=url, cert_auth=cert_auth, **kwargs).version
         self.instance = self.factory(version)(
             url=url,
             cert_auth=cert_auth,
@@ -179,6 +180,10 @@ class BrightAPI:
             return Bright8
         else:
             raise ValueError('Unsupported version')
+
+    def health_checks(self) -> typing.List[HealthCheck]:
+
+        pass
 
     def __getattr__(self, name):
         return self.instance.__getattribute__(name)
