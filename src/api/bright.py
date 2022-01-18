@@ -1,9 +1,11 @@
 import abc
+import json
 import os
 import typing
 
 import requests
 from flask import current_app
+from urllib.parse import urlencode
 
 from src.models.bright import HealthCheck
 
@@ -133,6 +135,19 @@ class Bright8(BrightBase):
             timeout=self.timeout
         ).json() or {}
 
+    def latest_measurable_status(self, measurable, entity=None):
+        params = {
+            'measurable': measurable,
+            'entity': entity
+        }
+
+        url = f"{self.base}/monitoring/latest?{urlencode(params)}"
+        return self._session.get(
+            url=url,
+            verify=self.verify,
+            timeout=self.timeout
+        ).json()
+
 
 class BrightAPI:
 
@@ -182,7 +197,9 @@ class BrightAPI:
 
     def health_checks(self) -> typing.List[HealthCheck]:
 
-        pass
+        return self.latest_measurable_status(
+            measurable='knime'
+        )
 
     def __getattr__(self, name):
         return self.instance.__getattribute__(name)
