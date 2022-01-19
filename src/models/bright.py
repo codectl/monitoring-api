@@ -12,6 +12,16 @@ class HealthCheck:
 
     def __init__(
             self,
-            status=None
+            name: str,
+            status: HealthCheckStatus = None,
+            node: str = None,
+            timestamp: int = None,
+            seconds_ago: int = None,
+            raw: dict = None
     ):
+        self.name = name
         self.status = HealthCheckStatus(status)
+        self.node = node
+        self.seconds_ago = seconds_ago
+        self.timestamp = timestamp
+        self.raw = raw
