@@ -6,7 +6,7 @@ import requests
 from flask import current_app
 from urllib.parse import urlencode
 
-from src.models.bright import HealthCheck
+from src.models.bright import HealthCheck, HealthCheckStatus
 
 
 class BrightBase(abc.ABC):
@@ -73,11 +73,20 @@ class BrightBase(abc.ABC):
     def measurable(self, name):
         pass
 
+    @staticmethod
+    @abc.abstractmethod
+    def measurable_mapper(raw):
+        pass
+
 
 class Bright(BrightBase):
     """Generic Bright implementation."""
 
     def measurable(self, name):
+        raise NotImplementedError('use a specific Bright version')
+
+    @staticmethod
+    def measurable_mapper(raw):
         raise NotImplementedError('use a specific Bright version')
 
 
@@ -113,6 +122,10 @@ class Bright7(BrightBase):
             timeout=self.timeout
         ).json() or {}
 
+    @staticmethod
+    def measurable_mapper(raw):
+        pass
+
 
 class Bright8(BrightBase):
 
@@ -134,7 +147,7 @@ class Bright8(BrightBase):
             timeout=self.timeout
         ).json() or {}
 
-    def latest_measurable_status(self, measurable, entity=None):
+    def latest_measurable_data(self, measurable, entity=None):
         params = {
             'measurable': measurable,
             **({'entity': entity} if entity is not None else {})
@@ -146,6 +159,17 @@ class Bright8(BrightBase):
             verify=self.verify,
             timeout=self.timeout
         ).json()
+
+    @staticmethod
+    def measurable_mapper(raw) -> HealthCheck:
+        return HealthCheck(
+            name=raw['measurable'],
+            status=HealthCheckStatus(raw['value']),
+            node=raw['entity'],
+            timestamp=raw['time'],
+            seconds_ago=raw['age'],
+            raw=raw,
+        ) if raw else None
 
 
 class BrightAPI:
@@ -196,7 +220,7 @@ class BrightAPI:
 
     def health_checks(self) -> typing.List[HealthCheck]:
 
-        return self.latest_measurable_status(
+        return self.latest_measurable_data(
             measurable='knime'
         )
 
