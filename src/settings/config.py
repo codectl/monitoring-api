@@ -26,6 +26,9 @@ class BaseConfig:
     BRIGHT_COMPUTING_CERT_PATH = env.str('BRIGHT_COMPUTING_CERT_PATH', '/etc/ssl/bright/cert.pem')
     BRIGHT_COMPUTING_KEY_PATH = env.str('BRIGHT_COMPUTING_KEY_PATH', '/etc/ssl/bright/cert.key')
 
+    # List of supported measurables
+    SUPPORTED_MEASURABLES = env.list('SUPPORTED_MEASURABLES', [])
+
     # Swagger properties
     OPENAPI = env('OPENAPI', '3.0.3')
     SWAGGER = {
