@@ -167,7 +167,7 @@ class Bright8(BrightBase):
             status=HealthCheckStatus(raw['value']),
             node=raw['entity'],
             timestamp=raw['time'],
-            seconds_ago=raw['age'],
+            seconds_ago=int(raw['age']),
             raw=raw,
         ) if raw else None
 
@@ -226,9 +226,9 @@ class BrightAPI:
         """Get available measurables and translate them to health checks."""
         return [
             self.measurable_mapper(
-                raw=next(self.latest_measurable_data(
+                raw=next(iter(self.latest_measurable_data(
                     measurable=measurable
-                ), None)
+                )['data']), None)
             ) for measurable in self.supported_measurables()
         ]
 
