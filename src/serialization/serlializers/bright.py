@@ -5,6 +5,5 @@ class HealthCheckSchema(Schema):
     name = fields.String()
     status = fields.String()
     node = fields.String()
-    seconds_agp = fields.Integer()
+    seconds_ago = fields.Integer()
     timestamp = fields.Integer()
-    raw = fields.Raw()

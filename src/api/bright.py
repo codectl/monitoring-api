@@ -167,7 +167,7 @@ class Bright8(BrightBase):
             status=HealthCheckStatus(raw['value']),
             node=raw['entity'],
             timestamp=raw['time'],
-            seconds_ago=raw['age'],
+            seconds_ago=int(raw['age']),
             raw=raw,
         ) if raw else None
 
