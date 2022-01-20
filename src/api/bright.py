@@ -223,16 +223,16 @@ class BrightAPI:
         return current_app.config['SUPPORTED_MEASURABLES']
 
     def health_checks(self) -> typing.List[HealthCheck]:
-        return [self.health_check(name=measurable) for measurable in self.supported_measurables()]
+        return [self.health_check(key=measurable) for measurable in self.supported_measurables()]
 
-    def health_check(self, name) -> typing.Optional[HealthCheck]:
+    def health_check(self, key) -> typing.Optional[HealthCheck]:
         """Get translated measurable to a health check."""
-        if name not in self.supported_measurables():
+        if key not in self.supported_measurables():
             return None
 
         return self.measurable_mapper(
                 raw=next(iter(self.latest_measurable_data(
-                    measurable=name
+                    measurable=key
                 )['data']), None)
             )
 

@@ -26,8 +26,30 @@ class HealthChecks(Resource):
                                 $ref: '#/components/schemas/HealthCheck'
         """
         health_checks = BrightAPI(verify=False).health_checks()
-
         return HealthCheckSchema(many=True).dump(health_checks)
+
+
+@api.resource('/health-check/<name:str>', endpoint='health-check')
+class HealthCheck(Resource):
+
+    def get(self, key):
+        """
+        Get health check given its identifier
+        ---
+        tags:
+            - health-checks
+        responses:
+            200:
+                description: Ok
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/HealthCheck'
+            404:
+                $ref: '#/components/responses/NotFound'
+        """
+        health_check = BrightAPI(verify=False).health_check(key=key)
+        return HealthCheckSchema().dump(health_check)
 
 
 @api.resource('/health-checks/supported-measurables', endpoint='supported-measurables')
