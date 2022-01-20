@@ -218,6 +218,10 @@ class BrightAPI:
         else:
             raise ValueError('Unsupported version')
 
+    @staticmethod
+    def supported_measurables():
+        return current_app.config['SUPPORTED_MEASURABLES']
+
     def health_checks(self) -> typing.List[HealthCheck]:
 
         return self.latest_measurable_data(
