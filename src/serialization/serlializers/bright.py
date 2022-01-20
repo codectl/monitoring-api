@@ -7,3 +7,4 @@ class HealthCheckSchema(Schema):
     node = fields.String()
     seconds_ago = fields.Integer()
     timestamp = fields.Integer()
+    info = fields.String()
