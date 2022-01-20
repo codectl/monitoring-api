@@ -228,7 +228,7 @@ class BrightAPI:
             self.measurable_mapper(
                 raw=next(self.latest_measurable_data(
                     measurable=measurable
-                ), None)
+                )['data'], None)
             ) for measurable in self.supported_measurables()
         ]
 
