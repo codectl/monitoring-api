@@ -226,9 +226,9 @@ class BrightAPI:
         """Get available measurables and translate them to health checks."""
         return [
             self.measurable_mapper(
-                raw=next(self.latest_measurable_data(
+                raw=next(iter(self.latest_measurable_data(
                     measurable=measurable
-                )['data'], None)
+                )['data']), None)
             ) for measurable in self.supported_measurables()
         ]
 
