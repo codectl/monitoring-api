@@ -223,10 +223,14 @@ class BrightAPI:
         return current_app.config['SUPPORTED_MEASURABLES']
 
     def health_checks(self) -> typing.List[HealthCheck]:
-
-        return self.latest_measurable_data(
-            measurable='knime'
-        )
+        """Get available measurables and translate them to health checks."""
+        return [
+            self.measurable_mapper(
+                raw=next(self.latest_measurable_data(
+                    measurable=measurable
+                ), None)
+            ) for measurable in self.supported_measurables()
+        ]
 
     def __getattr__(self, name):
         return self.instance.__getattribute__(name)
