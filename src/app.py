@@ -9,8 +9,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 from src.cli.test import test_command
 from src.settings.config import config_by_name
-from src.serialization.serlializers.http import HttpErrorSchema
-from src.serialization.serlializers.bright import HealthCheckSchema
+from src.schemas.serlializers.http import HttpErrorSchema
+from src.schemas.serlializers.bright import HealthCheckSchema
 
 
 # SQLite database
