@@ -45,14 +45,14 @@ class HealthCheck(Resource):
             }),
             location='path'
         ),
-        'tags': ['tickets'],
+        'tags': ['health-checks'],
         'responses': {
             200: {
                 'description': 'Ok',
                 'content': {
                     'application/json': {
                         'schema': {
-                            '$ref': '#/components/schemas/Issue'
+                            '$ref': '#/components/schemas/HealthCheck'
                         }
                     }
                 }
