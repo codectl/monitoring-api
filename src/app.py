@@ -12,12 +12,13 @@ from src.settings.config import config_by_name
 from src.schemas.serlializers.http import HttpErrorSchema
 from src.schemas.serlializers.bright import HealthCheckSchema
 
-
 # SQLite database
 db = SQLAlchemy()
 
 # initialize Flask Restful
 api = Api()
+
+mp = MarshmallowPlugin()
 
 
 def create_app(config_name='default'):
@@ -46,27 +47,29 @@ def setup_app(app):
     # register api blueprint
     app.register_blueprint(api_bp)
 
-    # Redirect root path to context root
+    # redirect root path to context root
     app.add_url_rule('/', 'index', lambda: redirect(url_for('flasgger.apidocs')))
 
-    # configure OAS3
+    # the OAS3 base spec template
+    spec = APISpec(
+        title=app.config['OPENAPI_SPEC']['info']['title'],
+        version=app.config['OPENAPI_SPEC']['info']['version'],
+        openapi_version=app.config['OPENAPI_SPEC']['openapi'],
+        plugins=(MarshmallowPlugin(),),
+        basePath=app.config['APPLICATION_CONTEXT'],
+        **app.config['OPENAPI_SPEC']
+    )
+
+    # register schemas
+    spec.components.schema('HealthCheck', schema=HealthCheckSchema)
+
+    # generate swagger from spec
     flasgger.Swagger(
         app=app,
         config=app.config['SWAGGER'],
         template=flasgger.apispec_to_template(
             app=app,
-            spec=APISpec(
-                title=app.config['OPENAPI_SPEC']['info']['title'],
-                version=app.config['OPENAPI_SPEC']['info']['version'],
-                openapi_version=app.config['OPENAPI_SPEC']['openapi'],
-                plugins=(MarshmallowPlugin(),),
-                basePath=app.config['APPLICATION_CONTEXT'],
-                **app.config['OPENAPI_SPEC']
-            ),
-            definitions=[  # schemas
-                HttpErrorSchema,
-                HealthCheckSchema
-            ]
+            spec=app.spec,
         ),
         merge=True
     )
