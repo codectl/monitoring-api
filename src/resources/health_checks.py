@@ -12,21 +12,27 @@ from src.schemas.serlializers.bright import HealthCheckSchema
 @api.resource('/health-checks', endpoint='health-checks')
 class HealthChecks(Resource):
 
+    @flasgger.swag_from({
+        'tags': ['health-checks'],
+        'responses': {
+            200: {
+                'description': 'Okkk',
+                'content': {
+                    'application/json': {
+                        'schema': {
+                            'type': 'array',
+                            'items': {
+                                'schema': HealthCheckSchema
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    })
     def get(self):
         """
         Get available health checks.
-        ---
-        tags:
-            - health-checks
-        responses:
-            200:
-                description: Ok
-                content:
-                    application/json:
-                        schema:
-                            type: array
-                            items:
-                                $ref: '#/components/schemas/HealthCheck'
         """
         health_checks = BrightAPI(verify=False).health_checks()
         return HealthCheckSchema(many=True).dump(health_checks)
@@ -36,31 +42,31 @@ class HealthChecks(Resource):
 class HealthCheck(Resource):
 
     @flasgger.swag_from({
-        'parameters': schema2parameters(
-            marshmallow.Schema.from_dict({
-                'key': marshmallow.fields.String(
-                    required=True,
-                    metadata=dict(description='ticket unique identifier')
-                )
-            }),
-            location='path'
-        ),
+        # 'parameters': schema2parameters(
+        #     marshmallow.Schema.from_dict({
+        #         'key': marshmallow.fields.String(
+        #             required=True,
+        #             metadata=dict(description='ticket unique identifier')
+        #         )
+        #     }),
+        #     location='path'
+        # ),
         'tags': ['health-checks'],
         'responses': {
             200: {
                 'description': 'Ok',
                 'content': {
                     'application/json': {
-                        'schema': {
-                            '$ref': '#/components/schemas/HealthCheck'
-                        }
+                        'schema': 'HealthCheckSchema'
                     }
                 }
             }
         }
     })
     def get(self, key):
-        """Get health check given its identifier."""
+        """
+        Get health check given its identifier.
+        """
         health_check = BrightAPI(verify=False).health_check(key=key)
         return HealthCheckSchema().dump(health_check)
 
@@ -72,6 +78,7 @@ class SupportedMeasurables(Resource):
         """
         Lists currently supported health check measurables.
         ---
+        test: abc
         tags:
             - health-checks
         responses:
