@@ -2,7 +2,7 @@ import marshmallow
 from flasgger.marshmallow_apispec import schema2parameters
 from flask import jsonify
 from flask_restful import Resource
-from apispec_plugins.helpers import spec_from
+from apispec_plugins.utils import spec_from
 
 from src.app import api
 from src.api.bright import BrightAPI

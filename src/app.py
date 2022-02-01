@@ -66,7 +66,7 @@ def setup_app(app):
     for view in app.view_functions.values():
         spec.path(view=view, app=app)
 
-    print(spec.to_yaml())
+    # print(spec.to_yaml())
 
     # generate swagger from spec
     # swg = flasgger.Swagger(
