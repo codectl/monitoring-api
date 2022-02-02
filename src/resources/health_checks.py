@@ -1,8 +1,5 @@
-import marshmallow
-from flasgger.marshmallow_apispec import schema2parameters
 from flask import jsonify
 from flask_restful import Resource
-from apispec_plugins.utils import spec_from
 
 from src.app import api
 from src.api.bright import BrightAPI
@@ -31,34 +28,28 @@ class HealthChecks(Resource):
         return HealthCheckSchema(many=True).dump(health_checks)
 
 
-@api.resource('/health-check/<key>', endpoint='health-check')
+@api.resource('/health-check/{key}', endpoint='health-check')
 class HealthCheck(Resource):
 
-    @spec_from({
-        'parameters': schema2parameters(
-            marshmallow.Schema.from_dict({
-                'key': marshmallow.fields.String(
-                    required=True,
-                    metadata=dict(description='ticket unique identifier')
-                )
-            }),
-            location='path'
-        ),
-        'tags': ['health-checks'],
-        'responses': {
-            200: {
-                'description': 'Ok',
-                'content': {
-                    'application/json': {
-                        'schema': 'HealthCheckSchema'
-                    }
-                }
-            }
-        }
-    })
     def get(self, key):
         """
         Get health check given its identifier.
+        ---
+        parameters:
+            - in: path
+              name: key
+              schema:
+                type: string
+              required: true
+              description: health check unique identifier
+        tags:
+            - health-checks
+        responses:
+            200:
+                description: Ok
+                content:
+                    application/json:
+                        schema: HealthCheckSchema
         """
         health_check = BrightAPI(verify=False).health_check(key=key)
         return HealthCheckSchema().dump(health_check)
