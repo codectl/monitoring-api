@@ -28,7 +28,7 @@ class HealthChecks(Resource):
         return HealthCheckSchema(many=True).dump(health_checks)
 
 
-@api.resource('/health-check/<key>', endpoint='health-check')
+@api.resource('/health-check/{key}', endpoint='health-check')
 class HealthCheck(Resource):
 
     def get(self, key):
@@ -37,11 +37,11 @@ class HealthCheck(Resource):
         ---
         parameters:
             - in: path
-              name: userId
+              name: key
               schema:
-                type: integer
+                type: string
               required: true
-              description: ticket unique identifier
+              description: health check unique identifier
         tags:
             - health-checks
         responses:
@@ -49,9 +49,7 @@ class HealthCheck(Resource):
                 description: Ok
                 content:
                     application/json:
-                        schema:
-                            type: array
-                            items: HealthCheckSchema
+                        schema: HealthCheckSchema
         """
         health_check = BrightAPI(verify=False).health_check(key=key)
         return HealthCheckSchema().dump(health_check)
