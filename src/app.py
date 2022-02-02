@@ -3,25 +3,19 @@ import os
 import flasgger
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-# from apispec_webframeworks.flask import FlaskPlugin
 from apispec_plugins.webframeworks.flask import FlaskPlugin
 from flask import Blueprint, Flask, redirect, url_for
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
-from flask_apispec import FlaskApiSpec, doc
 
 from src.cli.test import test_command
 from src.settings.config import config_by_name
-from src.schemas.serlializers.http import HttpErrorSchema
-from src.schemas.serlializers.bright import HealthCheckSchema
 
 # SQLite database
 db = SQLAlchemy()
 
 # initialize Flask Restful
 api = Api()
-
-docs = FlaskApiSpec(document_options=False)
 
 
 def create_app(config_name='default'):
@@ -50,9 +44,6 @@ def setup_app(app):
     # register api blueprint
     app.register_blueprint(api_bp)
 
-    # redirect root path to context root
-    app.add_url_rule('/', 'index', lambda: redirect(url_for('flasgger.apidocs')))
-
     spec = APISpec(
         title=app.config['OPENAPI_SPEC']['info']['title'],
         version=app.config['OPENAPI_SPEC']['info']['version'],
@@ -64,32 +55,25 @@ def setup_app(app):
 
     # resource discovery
     for view in app.view_functions.values():
-        spec.path(view=view, app=app)
-
-    # print(spec.to_yaml())
+        spec.path(
+            view=view,
+            app=app,
+            basePath=app.config['APPLICATION_CONTEXT']
+        )
 
     # generate swagger from spec
-    # swg = flasgger.Swagger(
-    #     app=app,
-    #     config=app.config['SWAGGER'],
-    #     template=flasgger.apispec_to_template(
-    #         app=app,
-    #         spec=spec,
-    #     ),
-    #     merge=True
-    # )
+    flasgger.Swagger(
+        app=app,
+        config=app.config['SWAGGER'],
+        template=flasgger.apispec_to_template(
+            app=app,
+            spec=spec,
+        ),
+        merge=True
+    )
 
-    # with app.app_context():
-    #     import yaml
-    #     print(yaml.dump(swg.get_apispecs('swagger')))
-
-    # print(app.url_map)
-
-    # print('---')
-    # with app.app_context():
-    #     import pprint
-    #     import yaml
-    #     print(yaml.dump(swg.get_apispecs('swagger')))
+    # redirect root path to context root
+    app.add_url_rule('/', 'index', view_func=lambda: redirect(url_for('flasgger.apidocs')))
 
     # register cli commands
     app.cli.add_command(test_command)
