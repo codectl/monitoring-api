@@ -4,7 +4,7 @@ import flasgger
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_plugins.webframeworks.flask import FlaskPlugin
-from flask import Blueprint, Flask, redirect, url_for
+from flask import Flask, redirect, url_for
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 
@@ -34,15 +34,8 @@ def create_app(config_name='default'):
 
 
 def setup_app(app):
-
-    # initialize root blueprint
-    api_bp = Blueprint('api', __name__, url_prefix=app.config['APPLICATION_CONTEXT'])
-
-    # link api to blueprint
-    api.init_app(api_bp)
-
-    # register api blueprint
-    app.register_blueprint(api_bp)
+    """Initial setups"""
+    api.init_app(app)
 
     spec = APISpec(
         title=app.config['OPENAPI_SPEC']['info']['title'],
