@@ -58,7 +58,7 @@ def setup_app(app):
         spec.path(
             view=view,
             app=app,
-            basePath=app.config['APPLICATION_CONTEXT']
+            base_path=app.config['APPLICATION_CONTEXT']
         )
 
     # generate swagger from spec

@@ -74,4 +74,3 @@ class SupportedMeasurables(Resource):
                             items: HealthCheckSchema
         """
         return jsonify(BrightAPI.supported_measurables())
-
