@@ -34,7 +34,7 @@ def create_app(config_name='default'):
 
 
 def setup_app(app):
-    """Initial setups"""
+    """Initial setups."""
     api.init_app(app)
 
     spec = APISpec(
