@@ -34,7 +34,7 @@ def create_app(config_name='default'):
 
 def setup_app(app):
     """Initial setups."""
-    app.register_blueprint(health_checks)
+    app.register_blueprint(health_checks, url_prefix=app.config['APPLICATION_CONTEXT'])
 
     # base template for OpenAPI specs
     spec_template = oas_template(
