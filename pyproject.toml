@@ -5,6 +5,9 @@ description = "A service responsible for providing monitoring data."
 authors = ["Renato Teixeira <rena2damas@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+packages = [
+    { include = "*", from = "src" }
+]
 homepage = ""
 repository = "https://github.com/rena2damas/monitoring-service"
 documentation = ""
