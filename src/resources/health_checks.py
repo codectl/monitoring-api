@@ -1,9 +1,11 @@
-from flask import jsonify
-from flask_restful import Resource
+from flask import Blueprint, jsonify
+from flask_restful import Api, Resource
 
-from src.app import api
 from src.api.bright import BrightAPI
 from src.schemas.serlializers.bright import HealthCheckSchema
+
+bp = Blueprint('health-checks', __name__)
+api = Api(bp)
 
 
 @api.resource('/health-checks', endpoint='health-checks')

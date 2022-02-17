@@ -5,17 +5,16 @@ from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_plugins.webframeworks.flask import FlaskPlugin
 from flask import Flask, redirect, url_for
-from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 
+from src import __meta__, __version__
 from src.cli.test import test_command
+from src.resources import health_checks
 from src.settings.config import config_by_name
+from src.settings.oas import oas_template, Server, Tag
 
 # SQLite database
 db = SQLAlchemy()
-
-# initialize Flask Restful
-api = Api()
 
 
 def create_app(config_name='default'):
@@ -35,18 +34,34 @@ def create_app(config_name='default'):
 
 def setup_app(app):
     """Initial setups."""
-    api.init_app(app)
+    app.register_blueprint(health_checks)
 
-    spec = APISpec(
-        title=app.config['OPENAPI_SPEC']['info']['title'],
-        version=app.config['OPENAPI_SPEC']['info']['version'],
-        openapi_version=app.config['OPENAPI_SPEC']['openapi'],
-        plugins=(FlaskPlugin(), MarshmallowPlugin()),
-        basePath=app.config['APPLICATION_CONTEXT'],
-        **app.config['OPENAPI_SPEC']
+    # base template for OpenAPI specs
+    spec_template = oas_template(
+        title=__meta__['name'],
+        version=__version__,
+        openapi_version=app.config['OPENAPI'],
+        description=__meta__['summary'],
+        servers=[Server(
+            url=app.config['APPLICATION_CONTEXT'],
+            description=app.config['ENV']
+        )],
+        tags=[Tag(
+            name='health-checks',
+            description='All operations involving health-checks',
+        )]
     )
 
-    # resource discovery
+    spec = APISpec(
+        title=__meta__['name'],
+        version=__version__,
+        openapi_version=app.config['OPENAPI'],
+        plugins=(FlaskPlugin(), MarshmallowPlugin()),
+        basePath=app.config['APPLICATION_CONTEXT'],
+        **spec_template
+    )
+
+    # create paths from app views
     for view in app.view_functions.values():
         spec.path(
             view=view,
