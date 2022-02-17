@@ -1,4 +1,7 @@
-__version_info__ = (0, 0, 1)
-__version__ = '.'.join(str(c) for c in __version_info__)
-
+try:
+    from importlib import metadata
+except ImportError:
+    import importlib_metadata as metadata  # python<=3.7
 import src.resources.health_checks
+
+__version__ = metadata.version("monitoring-service")
