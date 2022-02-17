@@ -1,19 +1,15 @@
-import os
+from dataclasses import dataclass
 
-import flasgger
-import yaml
-
-from src import __version__
 from src.settings.env import env
 
 
+@dataclass
 class BaseConfig:
     """Base configurations."""
 
     DEBUG = False
     TESTING = False
 
-    ENV = env.str('FLASK_ENV')
     HOST = env.str('FLASK_RUN_HOST', 'localhost')
     PORT = env.int('FLASK_RUN_PORT', 5000)
 
@@ -52,28 +48,21 @@ class BaseConfig:
         'hide_top_bar': True
     }
 
-    # OpenAPI 3 properties
-    OPENAPI_SPEC = yaml.safe_load(flasgger.utils.load_from_file(
-        os.path.join('src', 'settings', 'oas3.yaml')
-    ).format(**{
-        'OPENAPI': OPENAPI,
-        'APPLICATION_CONTEXT': APPLICATION_CONTEXT,
-        'ENV': ENV,
-        'VERSION': __version__
-    }))
 
-
+@dataclass
 class ProductionConfig(BaseConfig):
     ENV = 'production'
     LOG_LEVEL = 'INFO'
 
 
+@dataclass
 class DevelopmentConfig(BaseConfig):
     ENV = 'development'
     DEBUG = True
     LOG_LEVEL = 'DEBUG'
 
 
+@dataclass
 class TestingConfig(BaseConfig):
     ENV = 'testing'
     TESTING = True
