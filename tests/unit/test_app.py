@@ -1,34 +1,41 @@
-import unittest
+import pytest
 
 from src.app import create_app
 
 
-class TestApp(unittest.TestCase):
+@pytest.fixture(scope='session')
+def app():
+    return create_app(config_name='testing')
 
-    def setUp(self):
-        self.app = create_app(config_name='testing')
-        self.client = self.app.test_client()
-        self.ctx = self.app.config['APPLICATION_CONTEXT']
 
-    def tearDown(self):
-        pass
+@pytest.fixture(scope='session')
+def client(app):
+    return app.test_client()
 
-    def test_can_create_app(self):
+
+@pytest.fixture(scope='session')
+def ctx(app):
+    return app.config['APPLICATION_CONTEXT']
+
+
+class TestApp:
+
+    def test_can_create_app(self, app):
         """Can create an app."""
-        self.assertIsNotNone(self.app)
+        assert app is not None
 
-    def test_redirect_root_to_application_context(self):
+    def test_redirect_root_to_application_context(self, client, ctx):
         """App has an application context."""
-        response = self.client.get('/')
-        self.assertEquals(response.status_code, 302)
+        response = client.get('/')
+        assert response.status_code == 302
 
-        response = self.client.get('/', follow_redirects=True)
+        response = client.get('/', follow_redirects=True)
         request = response.request
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(request.path.rstrip('/'), self.ctx)
+        assert response.status_code == 200
+        assert request.path.rstrip('/') == ctx
 
-    def test_swagger_apidocs(self):
+    def test_swagger_apidocs(self, client, ctx):
         """App provides swagger specs."""
-        response = self.client.get(f"{self.ctx}/swagger.json")
+        response = client.get(f"{ctx}/swagger.json")
 
-        self.assertEquals(response.status_code, 200)
+        assert response.status_code == 200
