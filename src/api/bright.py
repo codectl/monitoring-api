@@ -9,6 +9,9 @@ from urllib.parse import urlencode
 from src.models.bright import HealthCheck, HealthCheckStatus
 
 
+__all__ = ('BrightAPI',)
+
+
 class BrightBase(abc.ABC):
     """Base class for Bright API."""
 
@@ -177,7 +180,7 @@ class BrightAPI:
     def __init__(
             self,
             host=None,
-            port=None,
+            port=443,
             protocol='https',
             cert_auth=None,
             version=None,
