@@ -34,7 +34,7 @@ def create_app(config_name='default'):
 
 def setup_app(app):
     """Initial setups."""
-    app.register_blueprint(health_checks, url_prefix=app.config['APPLICATION_CONTEXT'])
+    app.register_blueprint(health_checks)
 
     # base template for OpenAPI specs
     spec_template = oas_template(
@@ -43,7 +43,7 @@ def setup_app(app):
         openapi_version=app.config['OPENAPI'],
         description=__meta__['summary'],
         servers=[Server(
-            url=app.config['APPLICATION_CONTEXT'],
+            url=app.config['APPLICATION_ROOT'],
             description=app.config['ENV']
         )],
         tags=[Tag(
@@ -57,7 +57,7 @@ def setup_app(app):
         version=__version__,
         openapi_version=app.config['OPENAPI'],
         plugins=(FlaskPlugin(), MarshmallowPlugin()),
-        basePath=app.config['APPLICATION_CONTEXT'],
+        basePath=app.config['APPLICATION_ROOT'],
         **spec_template
     )
 
@@ -66,7 +66,7 @@ def setup_app(app):
         spec.path(
             view=view,
             app=app,
-            base_path=app.config['APPLICATION_CONTEXT']
+            base_path=app.config['APPLICATION_ROOT']
         )
 
     # generate swagger from spec
