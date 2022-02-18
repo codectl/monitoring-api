@@ -14,7 +14,7 @@ class BaseConfig:
     PORT = env.int('FLASK_RUN_PORT', 5000)
 
     # Application root context
-    APPLICATION_CONTEXT = env.str('APPLICATION_CONTEXT', '/')
+    APPLICATION_ROOT = env.str('APPLICATION_ROOT', '/')
 
     # Bright Computing properties
     BRIGHT_COMPUTING_HOST = env.str('BRIGHT_COMPUTING_HOST', 'localhost')
@@ -32,17 +32,17 @@ class BaseConfig:
         'specs': [
             {
                 'endpoint': 'swagger',
-                'route': APPLICATION_CONTEXT + '/swagger.json',
+                'route': APPLICATION_ROOT + '/swagger.json',
                 'rule_filter': lambda rule: True,
                 'model_filter': lambda tag: True
             }
         ],
 
         # where to find the docs (ensure trailing slash)
-        'specs_route': APPLICATION_CONTEXT + '/',
+        'specs_route': APPLICATION_ROOT + '/',
 
         # swagger static files
-        'static_url_path': APPLICATION_CONTEXT + '/flasgger_static',
+        'static_url_path': APPLICATION_ROOT + '/flasgger_static',
 
         # hide the Swagger top bar
         'hide_top_bar': True
