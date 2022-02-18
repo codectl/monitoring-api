@@ -20,5 +20,5 @@ def client(app):
 
 
 @pytest.fixture(scope='session')
-def ctx(app):
+def url_prefix(app):
     return app.config['APPLICATION_ROOT']
