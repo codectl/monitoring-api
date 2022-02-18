@@ -1,9 +1,9 @@
 import os
 
-import flasgger
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_plugins.webframeworks.flask import FlaskPlugin
+from flasgger import apispec_to_template, Swagger
 from flask import Blueprint, Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
@@ -75,10 +75,10 @@ def setup_app(app):
         )
 
     # generate swagger from spec
-    flasgger.Swagger(
+    Swagger(
         app=app,
         config=app.config['SWAGGER'],
-        template=flasgger.apispec_to_template(
+        template=apispec_to_template(
             app=app,
             spec=spec,
         ),
