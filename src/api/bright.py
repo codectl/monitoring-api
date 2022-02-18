@@ -24,8 +24,8 @@ class BrightBase(abc.ABC):
             self,
             url=None,
             session=None,
-            basic_auth=None,
-            cert_auth=None,
+            basic_auth=(),
+            cert_auth=(),
             verify=True,
             timeout=5
     ):
@@ -182,7 +182,8 @@ class BrightAPI:
             host=None,
             port=443,
             protocol='https',
-            cert_auth=None,
+            basic_auth=(),
+            cert_auth=(),
             version=None,
             **kwargs
     ):
@@ -190,7 +191,7 @@ class BrightAPI:
         port = port or current_app.config['BRIGHT_COMPUTING_PORT']
         url = f"{protocol}://{host}:{port}"
 
-        if not cert_auth:
+        if not basic_auth and not cert_auth:
             cert = current_app.config['BRIGHT_COMPUTING_CERT_PATH']
             key = current_app.config['BRIGHT_COMPUTING_KEY_PATH']
 
@@ -204,6 +205,7 @@ class BrightAPI:
         version = version or Bright(url=url, cert_auth=cert_auth, **kwargs).version
         self.instance = self.factory(version)(
             url=url,
+            basic_auth=basic_auth,
             cert_auth=cert_auth,
             **kwargs
         )
