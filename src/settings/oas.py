@@ -13,7 +13,7 @@ class Server:
     description: str
 
 
-def oas_template(openapi_version, servers=(), tags=(), **kwargs):
+def base_template(openapi_version, servers=(), tags=(), **kwargs):
     """Base OpenAPI template."""
     return {
         'openapi': openapi_version,

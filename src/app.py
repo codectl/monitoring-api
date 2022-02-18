@@ -11,7 +11,7 @@ from src import __meta__, __version__
 from src.cli.test import test_command
 from src.resources import health_checks
 from src.settings.config import config_by_name
-from src.settings.oas import oas_template, Server, Tag
+from src.settings.oas import base_template, Server, Tag
 
 # SQLite database
 db = SQLAlchemy()
@@ -37,7 +37,7 @@ def setup_app(app):
     app.register_blueprint(health_checks)
 
     # base template for OpenAPI specs
-    spec_template = oas_template(
+    spec_template = base_template(
         title=__meta__['name'],
         version=__version__,
         openapi_version=app.config['OPENAPI'],
