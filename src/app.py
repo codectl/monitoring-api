@@ -4,7 +4,7 @@ import flasgger
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_plugins.webframeworks.flask import FlaskPlugin
-from flask import Flask, redirect, url_for
+from flask import Blueprint, Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 from src import __meta__, __version__
@@ -34,7 +34,12 @@ def create_app(config_name='default'):
 
 def setup_app(app):
     """Initial setups."""
-    app.register_blueprint(health_checks)
+    url_prefix = app.config['APPLICATION_ROOT']
+
+    # initial blueprint wiring
+    index = Blueprint('index', __name__)
+    index.register_blueprint(health_checks)
+    app.register_blueprint(index, url_prefix=url_prefix)
 
     # base template for OpenAPI specs
     spec_template = base_template(
@@ -43,7 +48,7 @@ def setup_app(app):
         openapi_version=app.config['OPENAPI'],
         description=__meta__['summary'],
         servers=[Server(
-            url=app.config['APPLICATION_ROOT'],
+            url=url_prefix,
             description=app.config['ENV']
         )],
         tags=[Tag(
@@ -57,7 +62,7 @@ def setup_app(app):
         version=__version__,
         openapi_version=app.config['OPENAPI'],
         plugins=(FlaskPlugin(), MarshmallowPlugin()),
-        basePath=app.config['APPLICATION_ROOT'],
+        basePath=url_prefix,
         **spec_template
     )
 
@@ -66,7 +71,7 @@ def setup_app(app):
         spec.path(
             view=view,
             app=app,
-            base_path=app.config['APPLICATION_ROOT']
+            base_path=url_prefix
         )
 
     # generate swagger from spec
