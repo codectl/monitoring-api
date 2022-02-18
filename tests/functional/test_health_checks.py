@@ -16,14 +16,11 @@ def bright(request):
 
 class TestHealthCheckAPI:
 
-    def test_get_no_health_checks(self, ctx, client, app):
+    def test_get_no_health_checks(self, url_prefix, client):
         """Ensure GET request retrieves health checks."""
-        response = client.get(f"{ctx}/health-checks")
-        print(app.config)
-        print(11111111111111111)
-        print(response.json)
-        # content = json.loads(response.json)
-        #
+        response = client.get(f"{url_prefix}/health-checks")
+        content = json.loads(response.json)
+
         assert False
         # assert response.status_code == 200
         # assert content == []
