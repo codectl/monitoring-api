@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from src.settings.env import env
+from src.settings.oas import swagger_configs
 
 
 @dataclass
@@ -27,26 +28,10 @@ class BaseConfig:
 
     # Swagger properties
     OPENAPI = env('OPENAPI', '3.0.3')
-    SWAGGER = {
-        'openapi': OPENAPI,
-        'specs': [
-            {
-                'endpoint': 'swagger',
-                'route': APPLICATION_ROOT + '/swagger.json',
-                'rule_filter': lambda rule: True,
-                'model_filter': lambda tag: True
-            }
-        ],
-
-        # where to find the docs (ensure trailing slash)
-        'specs_route': APPLICATION_ROOT + '/',
-
-        # swagger static files
-        'static_url_path': APPLICATION_ROOT + '/flasgger_static',
-
-        # hide the Swagger top bar
-        'hide_top_bar': True
-    }
+    SWAGGER = swagger_configs(
+        openapi_version=OPENAPI,
+        app_root=APPLICATION_ROOT
+    )
 
 
 @dataclass
