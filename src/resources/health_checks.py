@@ -4,8 +4,8 @@ from flask_restful import Api, Resource
 from src.api.bright import BrightAPI
 from src.schemas.serlializers.bright import HealthCheckSchema
 
-bp = Blueprint('health-checks', __name__)
-api = Api(bp)
+blueprint = Blueprint('health-checks', __name__)
+api = Api(blueprint)
 
 
 @api.resource('/health-checks', endpoint='health-checks')
