@@ -9,7 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from src import __meta__, __version__
 from src.cli.test import test_command
-from src.resources import health_checks
+from src.resources.health_checks import blueprint as health_checks
 from src.settings.config import config_by_name
 from src.settings.oas import base_template, Server, Tag
 
