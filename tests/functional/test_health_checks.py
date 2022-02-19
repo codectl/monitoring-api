@@ -1,11 +1,11 @@
 import pytest
-from unittest.mock import MagicMock, Mock
+import requests
 
 from src.api.bright import BrightAPI
 from src.resources import health_checks
 
 
-@pytest.fixture(scope="function", params=(7, 8))
+@pytest.fixture(scope="session", params=(7, 8))
 def bright(request):
     return BrightAPI(
         host='localhost',
@@ -20,9 +20,10 @@ class TestHealthCheckAPI:
 
     def test_get_no_health_checks(self, url_prefix, client, bright, mocker):
         """Ensure GET request retrieves health checks."""
-        mock = Mock(return_value=bright)
-        mock.health_checks.return_value = []
-        mocker.patch.object(health_checks, 'BrightAPI', return_value=mock)
+        return_value = mocker.Mock(json=lambda: {'data': []})
+        mocker.patch.object(requests.Session, 'get', return_value=return_value)
+        mocker.patch.object(health_checks, 'BrightAPI', return_value=bright)
+
         response = client.get(f"{url_prefix}/health-checks")
         assert response.status_code == 200
         assert response.json == []
