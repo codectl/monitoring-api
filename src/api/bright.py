@@ -125,9 +125,36 @@ class Bright7(BrightBase):
             timeout=self.timeout
         ).json() or {}
 
+    def latest_measurable_data(self, measurable, entity=None) -> dict:
+        entity_id = self.entity(entity).get('uniqueKey')
+        measurable_id = self.measurable(health_check).get('uniqueKey')
+        if not entity_id or not measurable_id:
+            return {}
+
+        params = {
+            'service': 'cmmon',
+            'call': 'getLatestPickedRates',
+            'args': [
+                [entity_id],
+                [{'metricId': measurable_id}]
+            ]
+        }
+        return self._session.post(
+            self.url,
+            json=params,
+            verify=self.verify
+        ).json()
+
+
     @staticmethod
-    def measurable_mapper(raw):
-        pass
+    def measurable_mapper(raw) -> HealthCheck:
+        return HealthCheck(
+            name=raw['measurable'],
+            status=HealthCheckStatus(raw['rate']),
+            node=raw['entity'],
+            timestamp=raw['timestamp'],
+            raw=raw,
+        ) if raw else None
 
 
 class Bright8(BrightBase):
@@ -148,9 +175,9 @@ class Bright8(BrightBase):
             json=params,
             verify=self.verify,
             timeout=self.timeout
-        ).json() or {}
+        ).json()
 
-    def latest_measurable_data(self, measurable, entity=None):
+    def latest_measurable_data(self, measurable, entity=None) -> dict:
         params = {
             'measurable': measurable,
             **({'entity': entity} if entity is not None else {})
