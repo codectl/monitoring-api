@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 
 from src.settings.env import env
@@ -52,10 +53,3 @@ class TestingConfig(BaseConfig):
     ENV = 'testing'
     TESTING = True
     LOG_LEVEL = 'DEBUG'
-
-
-config_by_name = dict(
-    production=ProductionConfig,
-    development=DevelopmentConfig,
-    testing=TestingConfig
-)

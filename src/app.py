@@ -10,23 +10,22 @@ from flask_sqlalchemy import SQLAlchemy
 from src import __meta__, __version__
 from src.cli.test import test_command
 from src.resources.health_checks import blueprint as health_checks
-from src.settings.config import config_by_name
+from src.settings.env import config_class, load_env
 from src.settings.oas import base_template, Server, Tag
 
 # SQLite database
 db = SQLAlchemy()
 
 
-def create_app(config_name='default', configs={}):
+def create_app(config_name='development', env='.env'):
     """Create a new app."""
 
     # define the WSGI application object
     app = Flask(__name__, static_folder=None)
 
     # load object-based default configuration
-    env = os.getenv('FLASK_ENV', config_name)
-    app.config.from_object(config_by_name[env])
-    app.config.update(configs)
+    load_env(env)
+    app.config.from_object(config_class(config_name))
 
     setup_app(app)
 
