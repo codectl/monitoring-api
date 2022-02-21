@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 
 from src.settings.env import env
@@ -26,12 +27,8 @@ class BaseConfig:
     # List of supported measurables
     SUPPORTED_MEASURABLES = env.list('SUPPORTED_MEASURABLES', [])
 
-    # Swagger properties
+    # OPENAPI supported version
     OPENAPI = env('OPENAPI', '3.0.3')
-    SWAGGER = swagger_configs(
-        openapi_version=OPENAPI,
-        app_root=APPLICATION_ROOT
-    )
 
 
 @dataclass
@@ -52,10 +49,3 @@ class TestingConfig(BaseConfig):
     ENV = 'testing'
     TESTING = True
     LOG_LEVEL = 'DEBUG'
-
-
-config_by_name = dict(
-    production=ProductionConfig,
-    development=DevelopmentConfig,
-    testing=TestingConfig
-)

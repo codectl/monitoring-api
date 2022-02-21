@@ -27,7 +27,8 @@ def base_template(openapi_version, servers=(), tags=(), **kwargs):
     }
 
 
-def swagger_configs(openapi_version, app_root):
+def swagger_configs(openapi_version, app_root=''):
+    prefix = '' if app_root == '/' else app_root
     return {
         'openapi': openapi_version,
         'specs': [
@@ -40,10 +41,10 @@ def swagger_configs(openapi_version, app_root):
         ],
 
         # where to find the docs (ensure trailing slash)
-        'specs_route': app_root + '/',
+        'specs_route': prefix + '/',
 
         # swagger static files
-        'static_url_path': app_root + '/flasgger_static',
+        'static_url_path': prefix + '/flasgger_static',
 
         # hide the Swagger top bar
         'hide_top_bar': True
