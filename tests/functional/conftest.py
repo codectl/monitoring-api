@@ -5,7 +5,7 @@ from src.app import create_app
 
 @pytest.fixture(scope='module')
 def app():
-    app = create_app(config_name='testing', configs={
+    app = create_app(config_name='testing', env={
         'FLASK_RUN_HOST': 'localhost',
         'FLASK_RUN_PORT': str(5000),
         'APPLICATION_ROOT': '/',
