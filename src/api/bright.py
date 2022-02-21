@@ -126,8 +126,8 @@ class Bright7(BrightBase):
         ).json() or {}
 
     def latest_measurable_data(self, measurable, entity=None) -> dict:
+        measurable_id = self.measurable(measurable).get('uniqueKey')
         entity_id = self.entity(entity).get('uniqueKey')
-        measurable_id = self.measurable(health_check).get('uniqueKey')
         if not entity_id or not measurable_id:
             return {}
 
@@ -266,7 +266,7 @@ class BrightAPI:
         return self.measurable_mapper(
                 raw=next(iter(self.latest_measurable_data(
                     measurable=key
-                )['data']), None)
+                ).get('data', [])), None)
             )
 
     def __getattr__(self, name):

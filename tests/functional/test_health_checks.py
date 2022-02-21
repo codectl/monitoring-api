@@ -1,11 +1,13 @@
+import re
+
 import pytest
-import requests
+from requests_mock import ANY
 
 from src.api.bright import BrightAPI
 from src.resources import health_checks
 
 
-@pytest.fixture(scope="session", params=(7, 8))
+@pytest.fixture(scope="class", params=(7, 8))
 def bright(request):
     return BrightAPI(
         host='localhost',
@@ -18,10 +20,11 @@ def bright(request):
 
 class TestHealthCheckAPI:
 
-    def test_get_no_health_checks(self, url_prefix, client, bright, mocker):
+    def test_get_no_health_checks(self, url_prefix, client, bright, mocker, requests_mock):
         """Ensure GET request retrieves health checks."""
-        return_value = mocker.Mock(json=lambda: {'data': []})
-        mocker.patch.object(requests.Session, 'get', return_value=return_value)
+
+        matcher = re.compile(rf"{bright.url}.*")
+        requests_mock.register_uri(ANY, matcher, json={})
         mocker.patch.object(health_checks, 'BrightAPI', return_value=bright)
 
         response = client.get(f"{url_prefix}/health-checks")
