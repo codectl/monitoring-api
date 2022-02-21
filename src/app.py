@@ -17,7 +17,7 @@ from src.settings.oas import base_template, Server, Tag
 db = SQLAlchemy()
 
 
-def create_app(config_name='default'):
+def create_app(config_name='default', configs={}):
     """Create a new app."""
 
     # define the WSGI application object
@@ -26,6 +26,7 @@ def create_app(config_name='default'):
     # load object-based default configuration
     env = os.getenv('FLASK_ENV', config_name)
     app.config.from_object(config_by_name[env])
+    app.config.update(configs)
 
     setup_app(app)
 
