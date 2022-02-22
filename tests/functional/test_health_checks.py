@@ -20,25 +20,29 @@ def bright(request):
 
 class TestHealthCheckAPI:
 
-    def test_get_no_health_checks(self, url_prefix, client, bright, mocker, requests_mock):
-        """Ensure GET request retrieves health checks."""
+    def test_supported_measurables(self, client):
+        response = client.get('/health-checks/supported-measurables')
+        assert response.status_code == 200
+        assert response.json == ['foo']
 
+    def test_get_no_health_checks(self, client, bright, mocker, requests_mock):
+        """Ensure GET request retrieves health checks."""
         matcher = re.compile(rf"{bright.url}.*")
         requests_mock.register_uri(ANY, matcher, json={})
         mocker.patch.object(health_checks, 'BrightAPI', return_value=bright)
 
-        response = client.get(f"{url_prefix}/health-checks")
+        response = client.get('/health-checks')
         assert response.status_code == 200
         assert response.json == []
 
-    # def test_get_some_health_checks(self, client, ctx):
+    # def test_get_an_health_check(self, client, bright, mocker, requests_mock):
     #     """Ensure GET request retrieves health checks."""
     #     response = client.get(f"{ctx}/health-checks")
     #     content = json.loads(response.json)
     #
     #     assert response.status_code == 200
     #     assert content == [1, 2, 3]
-    #
+
     # def test_get_health_check_by_id(self):
     #     """Ensure GET request retrieves an health check by id."""
     #     pass
