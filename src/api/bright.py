@@ -1,5 +1,6 @@
 import abc
 import os
+import time
 import typing
 
 import requests
@@ -7,7 +8,6 @@ from flask import current_app
 from urllib.parse import urlencode
 
 from src.models.bright import HealthCheck, HealthCheckStatus
-
 
 __all__ = ('BrightAPI',)
 
@@ -125,7 +125,7 @@ class Bright7(BrightBase):
             timeout=self.timeout
         ).json() or {}
 
-    def latest_measurable_data(self, measurable, entity=None) -> dict:
+    def latest_measurable_data(self, measurable, entity) -> dict:
         measurable_id = self.measurable(measurable).get('uniqueKey')
         entity_id = self.entity(entity).get('uniqueKey')
         if not entity_id or not measurable_id:
@@ -139,20 +139,27 @@ class Bright7(BrightBase):
                 [{'metricId': measurable_id}]
             ]
         }
-        return self._session.post(
-            self.url,
-            json=params,
-            verify=self.verify
-        ).json()
-
+        return [
+            dict(
+                **data,
+                measurable=measurable,
+                entity=entity
+            ) for data in
+            self._session.post(
+                self.url,
+                json=params,
+                verify=self.verify
+            ).json()
+        ]
 
     @staticmethod
     def measurable_mapper(raw) -> HealthCheck:
         return HealthCheck(
             name=raw['measurable'],
-            status=HealthCheckStatus(raw['rate']),
+            status=HealthCheckStatus(round(float((raw['rate'])))),
             node=raw['entity'],
-            timestamp=raw['timestamp'],
+            timestamp=raw['timeStamp'],
+            seconds_ago=int(time.time() - raw['timeStamp']),
             raw=raw,
         ) if raw else None
 
@@ -188,7 +195,7 @@ class Bright8(BrightBase):
             url=url,
             verify=self.verify,
             timeout=self.timeout
-        ).json()
+        ).json()['data']
 
     @staticmethod
     def measurable_mapper(raw) -> HealthCheck:
@@ -229,7 +236,7 @@ class BrightAPI:
                 key = os.path.join(instance_path, key)
             cert_auth = (cert, key)
 
-        version = version or Bright(url=url, cert_auth=cert_auth, **kwargs).version
+        self.version = version or Bright(url=url, cert_auth=cert_auth, **kwargs).version
         self.instance = self.factory(version)(
             url=url,
             basic_auth=basic_auth,
@@ -254,20 +261,21 @@ class BrightAPI:
     def supported_measurables():
         return current_app.config['SUPPORTED_MEASURABLES']
 
-    def health_checks(self) -> typing.List[HealthCheck]:
-        checks = (self.health_check(key=measurable) for measurable in self.supported_measurables())
+    def health_checks(self, node=None) -> typing.List[HealthCheck]:
+        checks = (self.health_check(key=measurable, node=node) for measurable in self.supported_measurables())
         return list(filter(lambda x: x is not None, checks))
 
-    def health_check(self, key) -> typing.Optional[HealthCheck]:
+    def health_check(self, key, node=None) -> typing.Optional[HealthCheck]:
         """Get translated measurable to a health check."""
         if key not in self.supported_measurables():
             return None
 
         return self.measurable_mapper(
-                raw=next(iter(self.latest_measurable_data(
-                    measurable=key
-                ).get('data', [])), None)
-            )
+            raw=next(iter(self.latest_measurable_data(
+                measurable=key,
+                entity=node
+            )), None)
+        )
 
     def __getattr__(self, name):
         return self.instance.__getattribute__(name)
