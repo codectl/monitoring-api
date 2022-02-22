@@ -9,7 +9,7 @@ def app():
         'FLASK_RUN_HOST': 'localhost',
         'FLASK_RUN_PORT': 5000,
         'APPLICATION_ROOT': '/',
-        'SUPPORTED_MEASURABLES': ['foo'],
+        'SUPPORTED_MEASURABLES': ['foo', 'bar'],
         'OPENAPI': '3.0.3'  # default version
     })
     with app.test_request_context():
