@@ -110,7 +110,7 @@ class Bright7(BrightBase):
             json=params,
             verify=self.verify,
             timeout=self.timeout
-        ).json() or {}
+        ).json()
 
     def measurable(self, name):
         params = {
@@ -123,7 +123,7 @@ class Bright7(BrightBase):
             json=params,
             verify=self.verify,
             timeout=self.timeout
-        ).json() or {}
+        ).json()
 
     def latest_measurable_data(self, measurable, entity) -> dict:
         measurable_id = self.measurable(measurable).get('uniqueKey')
