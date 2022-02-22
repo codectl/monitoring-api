@@ -11,7 +11,7 @@ from src.resources import health_checks
 from src.schemas.serlializers.bright import HealthCheckSchema
 
 
-@pytest.fixture(scope="class", params=(7,))
+@pytest.fixture(scope="class", params=(7, 8))
 def bright(request):
     return BrightAPI(
         host='localhost',
@@ -78,10 +78,10 @@ class TestHealthCheckAPI:
         assert response.status_code == 200
         assert response.json == []
 
-    def test_valid_health_checks(self, app, client, bright, mocker):
+    def test_valid_health_checks(self, client, bright, mocker):
         """Ensure GET request retrieves valid health checks."""
-        mocker.patch.object(bright.instance, 'latest_measurable_data', side_effect=measurable_data(bright.version))
         mocker.patch.object(health_checks, 'BrightAPI', return_value=bright)
+        mocker.patch.object(bright.instance, 'latest_measurable_data', side_effect=measurable_data(bright.version))
         mocker.patch.object(time, 'time', return_value=0)
         expected = HealthCheckSchema(many=True).dump([
             HealthCheck(
