@@ -195,7 +195,7 @@ class Bright8(BrightBase):
             url=url,
             verify=self.verify,
             timeout=self.timeout
-        ).json()['data']
+        ).json().get('data', [])
 
     @staticmethod
     def measurable_mapper(raw) -> HealthCheck:
