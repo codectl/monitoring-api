@@ -27,12 +27,8 @@ class BaseConfig:
     # List of supported measurables
     SUPPORTED_MEASURABLES = env.list('SUPPORTED_MEASURABLES', [])
 
-    # Swagger properties
+    # OPENAPI supported version
     OPENAPI = env('OPENAPI', '3.0.3')
-    SWAGGER = swagger_configs(
-        openapi_version=OPENAPI,
-        app_root=APPLICATION_ROOT
-    )
 
 
 @dataclass
