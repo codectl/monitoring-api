@@ -7,15 +7,13 @@ def create_env():
     return dotenv
 
 
-def load_env(envs):
+def load_dotenv(dotenv: bool):
     """Load enviroment from given file or dict."""
-    if isinstance(envs, dict):
-        os.environ.update(envs)
-    elif isinstance(env, str) and os.path.isfile(envs):
-        env.read_env(envs)
+    if dotenv:
+        env.read_env('.env')
 
 
-def config_class(environment):
+def config_class(environment: str):
     """Link given environment to a config class."""
     return f"{__package__}.config.{environment.capitalize()}Config"
 
