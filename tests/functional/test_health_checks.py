@@ -104,10 +104,29 @@ class TestHealthCheckAPI:
         assert response.status_code == 200
         assert response.json == expected
 
-    # def test_get_health_check_by_id(self):
-    #     """Ensure GET request retrieves an health check by id."""
-    #     pass
-    #
-    # def test_get_missing_health_check(self):
-    #     """Ensure GET request cannot retrieve an health check by id."""
-    #     pass
+    def test_get_health_check_by_id(self, client, bright, mocker):
+        """Ensure GET request retrieves an health check by id."""
+        mocker.patch.object(health_checks, 'BrightAPI', return_value=bright)
+        mocker.patch.object(bright.instance, 'latest_measurable_data', side_effect=measurable_data(bright.version))
+        mocker.patch.object(time, 'time', return_value=0)
+        expected = HealthCheckSchema().dump(
+            HealthCheck(
+                name='foo',
+                status=HealthCheckStatus.ONLINE,
+                node='foo_node',
+                timestamp=0,
+                seconds_ago=0
+            )
+        )
+
+        response = client.get('/health-checks/foo')
+        assert response.status_code == 200
+        assert response.json == expected
+
+    def test_get_missing_health_check(self, client, bright, mocker):
+        """Ensure GET request cannot retrieve an health check by id."""
+        mocker.patch.object(health_checks, 'BrightAPI', return_value=bright)
+
+        response = client.get('/health-checks/unsupported')
+        assert response.status_code == 404
+        assert response.json == {}
