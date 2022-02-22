@@ -30,7 +30,7 @@ class HealthChecks(Resource):
         return HealthCheckSchema(many=True).dump(health_checks)
 
 
-@api.resource('/health-check/{key}', endpoint='health-check')
+@api.resource('/health-checks/<key>', endpoint='health-check')
 class HealthCheck(Resource):
 
     def get(self, key):
