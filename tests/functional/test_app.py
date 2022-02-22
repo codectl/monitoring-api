@@ -7,7 +7,7 @@ from src.app import create_app
 def local_app():
     app = create_app(config_name='testing', dotenv=False, configs={
         'FLASK_RUN_HOST': 'localhost',
-        'FLASK_RUN_PORT': str(5000),
+        'FLASK_RUN_PORT': 5000,
         'APPLICATION_ROOT': '/test/v2'
     })
     with app.app_context():

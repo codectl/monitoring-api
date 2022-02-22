@@ -7,9 +7,9 @@ from src.app import create_app
 def app():
     app = create_app(config_name='testing', dotenv=False, configs={
         'FLASK_RUN_HOST': 'localhost',
-        'FLASK_RUN_PORT': str(5000),
+        'FLASK_RUN_PORT': 5000,
         'APPLICATION_ROOT': '/',
-        'SUPPORTED_MEASURABLES': 'foo',
+        'SUPPORTED_MEASURABLES': ['foo'],
         'OPENAPI': '3.0.3'  # default version
     })
     with app.test_request_context():
