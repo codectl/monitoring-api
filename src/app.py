@@ -10,22 +10,23 @@ from flask_sqlalchemy import SQLAlchemy
 from src import __meta__, __version__
 from src.cli.test import test_command
 from src.resources.health_checks import blueprint as health_checks
-from src.settings.env import config_class, load_env
-from src.settings.oas import base_template, Server, Tag
+from src.settings import oas
+from src.settings.env import config_class, load_dotenv
 
 # SQLite database
 db = SQLAlchemy()
 
 
-def create_app(config_name='development', env='.env'):
+def create_app(config_name='development', dotenv=True, configs={}):
     """Create a new app."""
 
     # define the WSGI application object
     app = Flask(__name__, static_folder=None)
 
     # load object-based default configuration
-    load_env(env)
+    load_dotenv(dotenv)
     app.config.from_object(config_class(config_name))
+    app.config.update(configs)
 
     setup_app(app)
 
@@ -42,16 +43,16 @@ def setup_app(app):
     app.register_blueprint(index, url_prefix=url_prefix)
 
     # base template for OpenAPI specs
-    spec_template = base_template(
+    spec_template = oas.base_template(
         title=__meta__['name'],
         version=__version__,
         openapi_version=app.config['OPENAPI'],
         description=__meta__['summary'],
-        servers=[Server(
+        servers=[oas.Server(
             url=url_prefix,
             description=app.config['ENV']
         )],
-        tags=[Tag(
+        tags=[oas.Tag(
             name='health-checks',
             description='All operations involving health-checks',
         )]
@@ -77,7 +78,10 @@ def setup_app(app):
     # generate swagger from spec
     Swagger(
         app=app,
-        config=app.config['SWAGGER'],
+        config=oas.swagger_configs(
+            openapi_version=app.config['OPENAPI'],
+            app_root=url_prefix
+        ),
         template=apispec_to_template(
             app=app,
             spec=spec,
