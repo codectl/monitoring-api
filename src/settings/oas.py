@@ -34,7 +34,7 @@ def swagger_configs(openapi_version, app_root=''):
         'specs': [
             {
                 'endpoint': 'swagger',
-                'route': app_root + '/swagger.json',
+                'route': prefix + '/swagger.json',
                 'rule_filter': lambda rule: True,
                 'model_filter': lambda tag: True
             }
