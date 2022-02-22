@@ -1,6 +1,5 @@
 import re
 import time
-import typing
 from collections import namedtuple
 
 import pytest
@@ -23,7 +22,7 @@ def bright(request):
     )
 
 
-def measurable_factory(version) -> typing.ClassVar:
+def measurable_factory(version):
     if version == 7:
         return namedtuple('Measurable', ['name', 'timestamp', 'rate'])
     elif version == 8:
