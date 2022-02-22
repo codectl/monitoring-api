@@ -1,7 +1,6 @@
 import pytest
 
 from src.app import create_app
-from src.settings.oas import swagger_configs
 
 
 @pytest.fixture(scope='class')
@@ -11,8 +10,7 @@ def app():
         'FLASK_RUN_PORT': str(5000),
         'APPLICATION_ROOT': '/',
         'SUPPORTED_MEASURABLES': 'foo',
-        'OPENAPI': '3.0.3',
-        'SWAGGER': swagger_configs(openapi_version='3.0.3', app_root='/')
+        'OPENAPI': '3.0.3'  # default version
     })
     with app.test_request_context():
         yield app
