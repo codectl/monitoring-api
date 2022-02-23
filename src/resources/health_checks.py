@@ -56,7 +56,7 @@ class HealthCheck(Resource):
                 $ref: '#/components/responses/NotFound'
         """
         if key not in BrightAPI.supported_measurables():
-            abort(404, message='Resource Not Found')
+            abort(404, code=404, reason='Not Found')
         health_check = BrightAPI(verify=False).health_check(key=key)
         return HealthCheckSchema().dump(health_check)
 
