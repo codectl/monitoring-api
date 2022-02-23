@@ -49,7 +49,7 @@ def measurable_data(version):
         fixtures = [
             factory(measurable='foo', time=0, value='PASS'),
             factory(measurable='bar', time=0, value='FAIL'),
-            factory(measurable='unsupported', time=0, value='?')
+            factory(measurable='unsupported', time=0, value='UNKNOWN')
         ]
         return [[{
             'age': 0,
@@ -129,4 +129,4 @@ class TestHealthCheckAPI:
 
         response = client.get('/health-checks/unsupported')
         assert response.status_code == 404
-        assert response.json == {}
+        assert response.json == dict(code=404, reason='Not Found')
