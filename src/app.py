@@ -66,8 +66,7 @@ def setup_app(app):
             code=404,
             reason='NotFound',
             description='Not Found'
-        )],
-        schemas=[HttpResponseSchema]
+        )]
     )
 
     spec = APISpec(
