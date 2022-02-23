@@ -26,6 +26,7 @@ optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
+marshmallow = {version = ">=3.13.0", optional = true, markers = "extra == \"marshmallow\""}
 PyYAML = {version = ">=3.10", optional = true, markers = "extra == \"yaml\""}
 
 [package.extras]
@@ -682,7 +683,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "8f7e0c28cc272ac918786dd47c4d1630dead900c4c7b9e2b3e65b394ecc9635f"
+content-hash = "78096a9f50f572b2a39725a69e9a08ff2ce461701a84c76e1f94879452f49f18"
 
 [metadata.files]
 aenum = [
