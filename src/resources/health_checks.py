@@ -52,6 +52,8 @@ class HealthCheck(Resource):
                 content:
                     application/json:
                         schema: HealthCheckSchema
+            404:
+                $ref: '#/components/responses/NotFound'
         """
         health_check = BrightAPI(verify=False).health_check(key=key)
         return HealthCheckSchema().dump(health_check)
