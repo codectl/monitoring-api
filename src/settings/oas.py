@@ -1,5 +1,8 @@
 from dataclasses import dataclass
 
+from apispec.ext.marshmallow import OpenAPIConverter, resolver, SchemaResolver
+from apispec.utils import OpenAPIVersion
+
 
 @dataclass
 class Tag:
