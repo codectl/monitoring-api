@@ -74,7 +74,7 @@ def swagger_configs(openapi_version, app_root=''):
         'specs_route': prefix + '/',
 
         # swagger static files
-        'static_url_path': prefix + '/flasgger_static',
+        'static_url_path': prefix + '/static',
 
         # hide the Swagger top bar
         'hide_top_bar': True
