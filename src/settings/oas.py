@@ -16,7 +16,22 @@ class Server:
     description: str
 
 
-def base_template(openapi_version, servers=(), tags=(), **kwargs):
+@dataclass
+class HttpResponse:
+    code: str
+    reason: str
+    description: str
+
+
+def create_spec_converter(openapi_version):
+    return OpenAPIConverter(
+        openapi_version=openapi_version,
+        schema_name_resolver=lambda schema: None,
+        spec=None
+    )
+
+
+def base_template(openapi_version, info={}, servers=(), tags=(), responses=(), schemas=()):
     """Base OpenAPI template."""
     return {
         'openapi': openapi_version,
