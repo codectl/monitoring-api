@@ -1,6 +1,6 @@
 from marshmallow import fields, Schema
 
 
-class HttpErrorSchema(Schema):
-    status = fields.Int()
-    message = fields.String()
+class HttpResponseSchema(Schema):
+    code = fields.Int()
+    reason = fields.String()
