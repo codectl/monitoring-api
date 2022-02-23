@@ -10,7 +10,6 @@ from flask_sqlalchemy import SQLAlchemy
 from src import __meta__, __version__
 from src.cli.test import test_command
 from src.resources.health_checks import blueprint as health_checks
-from src.schemas.serlializers.http import HttpResponseSchema
 from src.settings import oas
 from src.settings.env import config_class, load_dotenv
 
