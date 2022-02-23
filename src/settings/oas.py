@@ -33,15 +33,27 @@ def create_spec_converter(openapi_version):
 
 def base_template(openapi_version, info={}, servers=(), tags=(), responses=(), schemas=()):
     """Base OpenAPI template."""
+
     return {
         'openapi': openapi_version,
-        'info': {
-            'title': kwargs.get('title'),
-            'description': kwargs.get('description'),
-            'version': kwargs.get('version')
-        },
+        'info': info,
         'servers': servers,
-        'tags': tags
+        'tags': tags,
+        'responses': {
+            response.reason: {
+                'description': response.description,
+                'content': {
+                    'application/json': {
+                        '$ref': '#/components/responses/HttpResponse'
+                    }
+                }
+            } for response in responses
+        },
+        'schemas': {
+            resolver(schema): {
+                **converter.schema2jsonschema(schema=schema)
+            } for schema in schemas
+        }
     }
 
 
