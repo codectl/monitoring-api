@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from apispec.ext.marshmallow import OpenAPIConverter, resolver
 from apispec.utils import OpenAPIVersion
 
+from src.schemas.serlializers.http import HttpResponseSchema
+
 
 @dataclass
 class Tag:
@@ -31,9 +33,8 @@ def create_spec_converter(openapi_version):
     )
 
 
-def base_template(openapi_version, info={}, servers=(), tags=(), responses=(), schemas=()):
+def base_template(openapi_version, info={}, servers=(), tags=(), responses=()):
     """Base OpenAPI template."""
-
     return {
         'openapi': openapi_version,
         'info': info,
@@ -49,11 +50,13 @@ def base_template(openapi_version, info={}, servers=(), tags=(), responses=(), s
                 }
             } for response in responses
         },
-        'schemas': {
-            resolver(schema): {
-                **converter.schema2jsonschema(schema=schema)
-            } for schema in schemas
-        }
+        **{'components': {
+            'schemas': {
+                'HttpResponse': {
+                    **converter.schema2jsonschema(schema=HttpResponseSchema)
+                }
+            }
+        } if responses else {}}
     }
 
 
