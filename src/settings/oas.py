@@ -52,7 +52,7 @@ def base_template(openapi_version, info={}, servers=(), tags=(), responses=()):
         },
         **{'components': {
             'schemas': {
-                'HttpResponse': {
+                resolver(HttpResponseSchema): {
                     **converter.schema2jsonschema(schema=HttpResponseSchema)
                 }
             }
