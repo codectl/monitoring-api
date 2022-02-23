@@ -40,23 +40,25 @@ def base_template(openapi_version, info={}, servers=(), tags=(), responses=()):
         'info': info,
         'servers': servers,
         'tags': tags,
-        'responses': {
-            response.reason: {
-                'description': response.description,
-                'content': {
-                    'application/json': {
-                        '$ref': '#/components/responses/HttpResponse'
+        'components': {
+            'responses': {
+                response.reason: {
+                    'description': response.description,
+                    'content': {
+                        'application/json': {
+                            'schema': {
+                                '$ref': '#/components/schemas/HttpResponse'
+                            }
+                        }
                     }
-                }
-            } for response in responses
-        },
-        **{'components': {
+                } for response in responses
+            },
             'schemas': {
                 resolver(HttpResponseSchema): {
                     **converter.schema2jsonschema(schema=HttpResponseSchema)
                 }
-            }
-        } if responses else {}}
+            } if responses else {}
+        }
     }
 
 
