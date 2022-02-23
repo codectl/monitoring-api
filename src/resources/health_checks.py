@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from flask_restful import Api, Resource
+from flask_restful import abort, Api, Resource
 
 from src.api.bright import BrightAPI
 from src.schemas.serlializers.bright import HealthCheckSchema
@@ -55,6 +55,8 @@ class HealthCheck(Resource):
             404:
                 $ref: '#/components/responses/NotFound'
         """
+        if key not in BrightAPI.supported_measurables():
+            abort(404, message='Resource Not Found')
         health_check = BrightAPI(verify=False).health_check(key=key)
         return HealthCheckSchema().dump(health_check)
 
