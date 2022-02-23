@@ -36,6 +36,7 @@ def create_app(config_name='development', dotenv=True, configs={}):
 def setup_app(app):
     """Initial setups."""
     url_prefix = app.config['APPLICATION_ROOT']
+    openapi_version = app.config['OPENAPI']
 
     # initial blueprint wiring
     index = Blueprint('index', __name__)
@@ -43,11 +44,14 @@ def setup_app(app):
     app.register_blueprint(index, url_prefix=url_prefix)
 
     # base template for OpenAPI specs
+    oas.converter = oas.create_spec_converter(openapi_version)
     spec_template = oas.base_template(
-        title=__meta__['name'],
-        version=__version__,
-        openapi_version=app.config['OPENAPI'],
-        description=__meta__['summary'],
+        openapi_version=openapi_version,
+        info=dict(
+            title=__meta__['name'],
+            version=__version__,
+            description=__meta__['summary']
+        ),
         servers=[oas.Server(
             url=url_prefix,
             description=app.config['ENV']
@@ -55,13 +59,19 @@ def setup_app(app):
         tags=[oas.Tag(
             name='health-checks',
             description='All operations involving health-checks',
-        )]
+        )],
+        responses=[oas.HttpResponse(
+            code=404,
+            reason='NotFound',
+            description='Not Found'
+        )],
+        schemas=[HttpResponseSchema]
     )
 
     spec = APISpec(
         title=__meta__['name'],
         version=__version__,
-        openapi_version=app.config['OPENAPI'],
+        openapi_version=openapi_version,
         plugins=(FlaskPlugin(), MarshmallowPlugin()),
         basePath=url_prefix,
         **spec_template
@@ -79,12 +89,12 @@ def setup_app(app):
     Swagger(
         app=app,
         config=oas.swagger_configs(
-            openapi_version=app.config['OPENAPI'],
+            openapi_version=openapi_version,
             app_root=url_prefix
         ),
         template=apispec_to_template(
             app=app,
-            spec=spec,
+            spec=spec
         ),
         merge=True
     )
