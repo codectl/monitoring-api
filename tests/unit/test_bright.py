@@ -1,7 +1,7 @@
 import unittest
 
 
-# class TestApp(unittest.TestCase):
+# class TestBrightAPI:
 #
 #     def setUp(self):
 #         self.bright = Bright(version='latest')
