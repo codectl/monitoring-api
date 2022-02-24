@@ -42,8 +42,7 @@ def measurable_data(version):
             'entity': f"{fixture.name}_node",
             'measurable': fixture.name,
             'timeStamp': fixture.timestamp,
-            'rate': fixture.rate,
-            'raw': {}
+            'rate': fixture.rate
         }] for fixture in fixtures]
     elif version == 8:
         fixtures = [
@@ -56,8 +55,7 @@ def measurable_data(version):
             'entity': f"{fixture.measurable}_node",
             'measurable': fixture.measurable,
             'time': fixture.time,
-            'value': fixture.value,
-            'raw': {}
+            'value': fixture.value
         }] for fixture in fixtures]
 
 
