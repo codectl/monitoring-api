@@ -2,7 +2,6 @@ import re
 import time
 
 import pytest
-from requests_mock import ANY
 
 from src.api.bright import BrightAPI
 from src.models.bright import HealthCheck, HealthCheckStatus
