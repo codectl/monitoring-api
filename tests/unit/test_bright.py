@@ -2,6 +2,7 @@ import re
 import time
 
 import pytest
+from requests_mock import ANY
 
 from src.api.bright import BrightAPI
 from src.models.bright import HealthCheck, HealthCheckStatus
@@ -124,3 +125,13 @@ class TestBrightAPI:
 
         health_check = bright.health_check('foo', node='foo_node')
         assert health_check == expected
+
+    @pytest.mark.parametrize('version', (7, 8))
+    def test_unsupported_health_check(self, version, mocker):
+        bright = BrightAPI(
+            host='localhost',
+            basic_auth=('user', 'pass'),
+            version=version
+        )
+        mocker.patch.object(bright, 'supported_measurables', return_value=['foo'])
+        assert bright.health_check(key='bar') is None
