@@ -1,10 +1,10 @@
 import re
+import time
 
 import pytest
 
 from src.api.bright import BrightAPI
 from src.models.bright import HealthCheck, HealthCheckStatus
-from src.schemas.serlializers.bright import HealthCheckSchema
 
 
 @pytest.fixture(scope="class", params=(7, 8))
@@ -66,16 +66,15 @@ class TestBrightAPI:
             basic_auth=('user', 'pass'),
             version=8
         )
-        matcher = re.compile(rf"{bright.url}.*")
         mocker.patch.object(bright, 'supported_measurables', return_value=['foo'])
         data = {'data': [{
             'age': 0,
             'entity': 'foo_node',
             'measurable': 'foo',
             'time': 0,
-            'value': value,
-            'raw': {}
+            'value': value
         }]}
+        matcher = re.compile(rf"{bright.url}.*")
         requests_mock.register_uri('GET', matcher, json=data)
         expected = HealthCheck(
             name='foo',
@@ -89,31 +88,39 @@ class TestBrightAPI:
         health_check = bright.health_check('foo')
         assert health_check == expected
 
-    # def test_bright7_health_check(self, mocker, requests_mock):
-    #     bright = BrightAPI(
-    #         host='localhost',
-    #         basic_auth=('user', 'pass'),
-    #         version=7
-    #     )
-    #     matcher = re.compile(rf"{bright.url}.*")
-    #     mocker.patch.object(bright, 'supported_measurables', return_value=['foo'])
-    #     data = {'data': [{
-    #         'age': 0,
-    #         'entity': 'foo_node',
-    #         'measurable': 'foo',
-    #         'time': 0,
-    #         'value': 'PASS',
-    #         'raw': {}
-    #     }]}
-    #     requests_mock.register_uri('GET', matcher, json=data)
-    #     expected = HealthCheck(
-    #         name='foo',
-    #         status=HealthCheckStatus.ONLINE,
-    #         node='foo_node',
-    #         timestamp=0,
-    #         seconds_ago=0,
-    #         raw=data['data'][0]
-    #     )
-    #
-    #     health_check = bright.health_check('foo')
-    #     assert health_check == expected
+    @pytest.mark.parametrize('rate', (0, 0.0, 1, 1.0, 2, 2.0))
+    def test_bright7_health_check(self, rate, mocker, requests_mock):
+        bright = BrightAPI(
+            host='localhost',
+            basic_auth=('user', 'pass'),
+            version=7
+        )
+        mocker.patch.object(bright, 'supported_measurables', return_value=['foo'])
+        mocker.patch.object(bright.instance, 'measurable', return_value={'uniqueKey': 1})
+        mocker.patch.object(bright.instance, 'entity', return_value={'uniqueKey': 1})
+        mocker.patch.object(time, 'time', return_value=0)
+        data = [{
+            'timeStamp': 0,
+            'rate': rate,
+            'devId': 1,
+            'metricId': 1,
+            'severity': 1,
+            'uniqueKey': 1
+        }]
+        matcher = re.compile(rf"{bright.url}.*")
+        requests_mock.register_uri('POST', matcher, json=data)
+        expected = HealthCheck(
+            name='foo',
+            status=HealthCheckStatus(rate),
+            node='foo_node',
+            timestamp=0,
+            seconds_ago=0,
+            raw={
+                **data[0],
+                'measurable': 'foo',
+                'entity': 'foo_node'
+            }
+        )
+
+        health_check = bright.health_check('foo', node='foo_node')
+        assert health_check == expected
