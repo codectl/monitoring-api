@@ -8,7 +8,6 @@ from flask import Blueprint, Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 from src import __meta__, __version__
-from src.cli.test import test_command
 from src.resources.health_checks import blueprint as health_checks
 from src.settings import oas
 from src.settings.env import config_class, load_dotenv
@@ -101,6 +100,3 @@ def setup_app(app):
 
     # redirect root path to context root
     app.add_url_rule('/', 'index', view_func=lambda: redirect(url_for('flasgger.apidocs')))
-
-    # register cli commands
-    app.cli.add_command(test_command)
