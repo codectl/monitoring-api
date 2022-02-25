@@ -56,7 +56,7 @@ class BrightBase(abc.ABC):
 
     @property
     def version(self):
-        base = "{}/{}".format(self.url, "json")
+        base = f"{self.url}/json"
         params = {
             "service": "cmmain",
             "call": "getVersion",
@@ -90,7 +90,7 @@ class Bright(BrightBase):
 class Bright7(BrightBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.base = "{}/{}".format(self.url, "json")
+        self.base = f"{self.url}/json"
 
     def entity(self, name):
         params = {"service": "cmdevice", "call": "getDevice", "arg": name}
@@ -141,10 +141,10 @@ class Bright7(BrightBase):
 class Bright8(BrightBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.base = "{}/{}/{}".format(self.url, "rest", "v1")
+        self.base = f"{self.url}/rest/v1"
 
     def measurable(self, name):
-        base = "{}/{}".format(self.url, "json")
+        base = f"{self.url}/json"
         params = {"service": "cmmon", "call": "getMonitoringMeasurable", "arg": name}
         return self._session.post(
             url=base, json=params, verify=self.verify, timeout=self.timeout
