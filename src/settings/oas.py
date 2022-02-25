@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 from apispec.ext.marshmallow import OpenAPIConverter, resolver
-from apispec.utils import OpenAPIVersion
 
 from src.schemas.serlializers.http import HttpResponseSchema
 
