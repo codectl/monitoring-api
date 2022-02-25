@@ -146,4 +146,4 @@ class TestHealthCheckAPI:
 
         response = client.get("/health-checks/unsupported")
         assert response.status_code == 404
-        assert response.json == dict(code=404, reason="Not Found")
+        assert response.json == {"code": 404, "reason": "Not Found"}

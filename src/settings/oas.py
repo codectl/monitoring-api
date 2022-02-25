@@ -33,11 +33,11 @@ def create_spec_converter(openapi_version):
     )
 
 
-def base_template(openapi_version, info={}, servers=(), tags=(), responses=()):
+def base_template(openapi_version, info=None, servers=(), tags=(), responses=()):
     """Base OpenAPI template."""
     return {
         "openapi": openapi_version,
-        "info": info,
+        "info": info or {},
         "servers": servers,
         "tags": tags,
         "components": {
