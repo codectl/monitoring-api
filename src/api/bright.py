@@ -28,12 +28,14 @@ class BrightBase(abc.ABC):
     ):
         """
         :param session: an already existing session session.
-        :param basic_auth: a tuple of username and password to use when establishing a session via HTTP BASIC
+        :param basic_auth: a tuple of username and password
+               to use when establishing a session via HTTP BASIC
         authentication.
-        :param cert_auth: a tuple of cert and key to use when establishing a session. The pair is used for both
+        :param cert_auth: a tuple of cert and key to use
+               when establishing a session. The pair is used for both
         authentication and encryption.
         :param verify: check whether verify SSL connection
-        :param timeout: how much time until connection is dropped, in seconds
+        :param timeout: how much time until connection is dropped, in seconds.
         """
         self.url = url
         if session is None:
