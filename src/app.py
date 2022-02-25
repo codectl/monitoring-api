@@ -17,7 +17,7 @@ from src.settings.env import config_class, load_dotenv
 db = SQLAlchemy()
 
 
-def create_app(config_name='development', dotenv=True, configs={}):
+def create_app(config_name="development", dotenv=True, configs={}):
     """Create a new app."""
 
     # define the WSGI application object
@@ -35,11 +35,11 @@ def create_app(config_name='development', dotenv=True, configs={}):
 
 def setup_app(app):
     """Initial setups."""
-    url_prefix = app.config['APPLICATION_ROOT']
-    openapi_version = app.config['OPENAPI']
+    url_prefix = app.config["APPLICATION_ROOT"]
+    openapi_version = app.config["OPENAPI"]
 
     # initial blueprint wiring
-    index = Blueprint('index', __name__)
+    index = Blueprint("index", __name__)
     index.register_blueprint(health_checks)
     app.register_blueprint(index, url_prefix=url_prefix)
 
@@ -48,27 +48,22 @@ def setup_app(app):
     spec_template = oas.base_template(
         openapi_version=openapi_version,
         info=dict(
-            title=__meta__['name'],
-            version=__version__,
-            description=__meta__['summary']
+            title=__meta__["name"], version=__version__, description=__meta__["summary"]
         ),
-        servers=[oas.Server(
-            url=url_prefix,
-            description=app.config['ENV']
-        )],
-        tags=[oas.Tag(
-            name='health-checks',
-            description='All operations involving health-checks',
-        )],
-        responses=[oas.HttpResponse(
-            code=404,
-            reason='NotFound',
-            description='Not Found'
-        )]
+        servers=[oas.Server(url=url_prefix, description=app.config["ENV"])],
+        tags=[
+            oas.Tag(
+                name="health-checks",
+                description="All operations involving health-checks",
+            )
+        ],
+        responses=[
+            oas.HttpResponse(code=404, reason="NotFound", description="Not Found")
+        ],
     )
 
     spec = APISpec(
-        title=__meta__['name'],
+        title=__meta__["name"],
         version=__version__,
         openapi_version=openapi_version,
         plugins=(FlaskPlugin(), MarshmallowPlugin()),
@@ -78,25 +73,19 @@ def setup_app(app):
 
     # create paths from app views
     for view in app.view_functions.values():
-        spec.path(
-            view=view,
-            app=app,
-            base_path=url_prefix
-        )
+        spec.path(view=view, app=app, base_path=url_prefix)
 
     # generate swagger from spec
     Swagger(
         app=app,
         config=oas.swagger_configs(
-            openapi_version=openapi_version,
-            app_root=url_prefix
+            openapi_version=openapi_version, app_root=url_prefix
         ),
-        template=apispec_to_template(
-            app=app,
-            spec=spec
-        ),
-        merge=True
+        template=apispec_to_template(app=app, spec=spec),
+        merge=True,
     )
 
     # redirect root path to context root
-    app.add_url_rule('/', 'index', view_func=lambda: redirect(url_for('flasgger.apidocs')))
+    app.add_url_rule(
+        "/", "index", view_func=lambda: redirect(url_for("flasgger.apidocs"))
+    )

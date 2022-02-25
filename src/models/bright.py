@@ -3,9 +3,9 @@ from dataclasses import dataclass
 
 
 class HealthCheckStatus(MultiValueEnum):
-    ONLINE = 0, 'PASS'
-    UNKNOWN = 1, 'UNKNOWN', 'no data'
-    OFFLINE = 2, 'FAIL'
+    ONLINE = 0, "PASS"
+    UNKNOWN = 1, "UNKNOWN", "no data"
+    OFFLINE = 2, "FAIL"
     NONE = None
 
 
