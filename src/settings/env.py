@@ -1,5 +1,4 @@
 import environs
-import os
 
 
 def create_env():
