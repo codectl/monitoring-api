@@ -45,9 +45,11 @@ def setup_app(app):
     oas.converter = oas.create_spec_converter(openapi_version)
     spec_template = oas.base_template(
         openapi_version=openapi_version,
-        info=dict(
-            title=__meta__["name"], version=__version__, description=__meta__["summary"]
-        ),
+        info={
+            "title": __meta__["name"],
+            "version": __version__,
+            "description": __meta__["summary"],
+        },
         servers=[oas.Server(url=url_prefix, description=app.config["ENV"])],
         tags=[
             oas.Tag(
