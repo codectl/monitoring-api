@@ -1,8 +1,6 @@
-import os
 from dataclasses import dataclass
 
 from src.settings.env import env
-from src.settings.oas import swagger_configs
 
 
 @dataclass
