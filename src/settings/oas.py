@@ -34,6 +34,7 @@ def create_spec_converter(openapi_version):
 
 def base_template(openapi_version, info=None, servers=(), tags=(), responses=()):
     """Base OpenAPI template."""
+    global converter
     return {
         "openapi": openapi_version,
         "info": info or {},
