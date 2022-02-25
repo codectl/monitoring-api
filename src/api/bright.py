@@ -214,16 +214,13 @@ class BrightAPI:
 
     @staticmethod
     def factory(version):
-        if isinstance(version, str):
-            version = int(float(version))
-        elif isinstance(version, float):
-            version = int(version)
-        if version == 7:
-            return Bright7
-        elif version == 8:
-            return Bright8
-        else:
+        major_version = int(float(version))
+        if major_version not in (7, 8):
             raise ValueError("Unsupported version")
+        elif major_version == 7:
+            return Bright7
+        elif major_version == 8:
+            return Bright8
 
     @staticmethod
     def supported_measurables():
