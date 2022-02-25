@@ -10,7 +10,7 @@ def create_env():
 def load_dotenv(dotenv: bool):
     """Load enviroment from given file or dict."""
     if dotenv:
-        env.read_env('.env')
+        env.read_env(".env")
 
 
 def config_class(environment: str):

@@ -29,58 +29,56 @@ def create_spec_converter(openapi_version):
     return OpenAPIConverter(
         openapi_version=openapi_version,
         schema_name_resolver=lambda schema: None,
-        spec=None
+        spec=None,
     )
 
 
 def base_template(openapi_version, info={}, servers=(), tags=(), responses=()):
     """Base OpenAPI template."""
     return {
-        'openapi': openapi_version,
-        'info': info,
-        'servers': servers,
-        'tags': tags,
-        'components': {
-            'responses': {
+        "openapi": openapi_version,
+        "info": info,
+        "servers": servers,
+        "tags": tags,
+        "components": {
+            "responses": {
                 response.reason: {
-                    'description': response.description,
-                    'content': {
-                        'application/json': {
-                            'schema': {
-                                '$ref': '#/components/schemas/HttpResponse'
-                            }
+                    "description": response.description,
+                    "content": {
+                        "application/json": {
+                            "schema": {"$ref": "#/components/schemas/HttpResponse"}
                         }
-                    }
-                } for response in responses
+                    },
+                }
+                for response in responses
             },
-            'schemas': {
+            "schemas": {
                 resolver(HttpResponseSchema): {
                     **converter.schema2jsonschema(schema=HttpResponseSchema)
                 }
-            } if responses else {}
-        }
+            }
+            if responses
+            else {},
+        },
     }
 
 
-def swagger_configs(openapi_version, app_root=''):
-    prefix = '' if app_root == '/' else app_root
+def swagger_configs(openapi_version, app_root=""):
+    prefix = "" if app_root == "/" else app_root
     return {
-        'openapi': openapi_version,
-        'specs': [
+        "openapi": openapi_version,
+        "specs": [
             {
-                'endpoint': 'swagger',
-                'route': prefix + '/swagger.json',
-                'rule_filter': lambda rule: True,
-                'model_filter': lambda tag: True
+                "endpoint": "swagger",
+                "route": prefix + "/swagger.json",
+                "rule_filter": lambda rule: True,
+                "model_filter": lambda tag: True,
             }
         ],
-
         # where to find the docs (ensure trailing slash)
-        'specs_route': prefix + '/',
-
+        "specs_route": prefix + "/",
         # swagger static files
-        'static_url_path': prefix + '/static',
-
+        "static_url_path": prefix + "/static",
         # hide the Swagger top bar
-        'hide_top_bar': True
+        "hide_top_bar": True,
     }

@@ -9,25 +9,22 @@ from urllib.parse import urlencode
 
 from src.models.bright import HealthCheck, HealthCheckStatus
 
-__all__ = ('BrightAPI',)
+__all__ = ("BrightAPI",)
 
 
 class BrightBase(abc.ABC):
     """Base class for Bright API."""
 
-    default_headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    }
+    default_headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
     def __init__(
-            self,
-            url=None,
-            session=None,
-            basic_auth=(),
-            cert_auth=(),
-            verify=True,
-            timeout=5
+        self,
+        url=None,
+        session=None,
+        basic_auth=(),
+        cert_auth=(),
+        verify=True,
+        timeout=5,
     ):
         """
         :param session: an already existing session session.
@@ -59,18 +56,15 @@ class BrightBase(abc.ABC):
 
     @property
     def version(self):
-        base = "{0}/{1}".format(self.url, 'json')
+        base = "{}/{}".format(self.url, "json")
         params = {
-            'service': 'cmmain',
-            'call': 'getVersion',
+            "service": "cmmain",
+            "call": "getVersion",
         }
         response = self._session.post(
-            url=base,
-            json=params,
-            verify=self.verify,
-            timeout=self.timeout
+            url=base, json=params, verify=self.verify, timeout=self.timeout
         ).json()
-        return response.get('cmVersion')
+        return response.get("cmVersion")
 
     @abc.abstractmethod
     def measurable(self, name):
@@ -86,148 +80,123 @@ class Bright(BrightBase):
     """Generic Bright implementation."""
 
     def measurable(self, name):
-        raise NotImplementedError('use a specific Bright version')
+        raise NotImplementedError("use a specific Bright version")
 
     @staticmethod
     def measurable_mapper(raw):
-        raise NotImplementedError('use a specific Bright version')
+        raise NotImplementedError("use a specific Bright version")
 
 
 class Bright7(BrightBase):
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.base = "{0}/{1}".format(self.url, 'json')
+        self.base = "{}/{}".format(self.url, "json")
 
     def entity(self, name):
-        params = {
-            'service': 'cmdevice',
-            'call': 'getDevice',
-            'arg': name
-        }
+        params = {"service": "cmdevice", "call": "getDevice", "arg": name}
         return self._session.post(
-            url=self.base,
-            json=params,
-            verify=self.verify,
-            timeout=self.timeout
+            url=self.base, json=params, verify=self.verify, timeout=self.timeout
         ).json()
 
     def measurable(self, name):
-        params = {
-            'service': 'cmmon',
-            'call': 'getHealthcheck',
-            'arg': name
-        }
+        params = {"service": "cmmon", "call": "getHealthcheck", "arg": name}
         return self._session.post(
-            url=self.base,
-            json=params,
-            verify=self.verify,
-            timeout=self.timeout
+            url=self.base, json=params, verify=self.verify, timeout=self.timeout
         ).json()
 
     def latest_measurable_data(self, measurable, entity) -> dict:
-        measurable_id = self.measurable(measurable).get('uniqueKey')
-        entity_id = self.entity(entity).get('uniqueKey')
+        measurable_id = self.measurable(measurable).get("uniqueKey")
+        entity_id = self.entity(entity).get("uniqueKey")
         if not entity_id or not measurable_id:
             return {}
 
         params = {
-            'service': 'cmmon',
-            'call': 'getLatestPickedRates',
-            'args': [
-                [entity_id],
-                [{'metricId': measurable_id}]
-            ]
+            "service": "cmmon",
+            "call": "getLatestPickedRates",
+            "args": [[entity_id], [{"metricId": measurable_id}]],
         }
         return [
-            dict(
-                **data,
-                measurable=measurable,
-                entity=entity
-            ) for data in
-            self._session.post(
-                self.url,
-                json=params,
-                verify=self.verify
+            dict(**data, measurable=measurable, entity=entity)
+            for data in self._session.post(
+                self.url, json=params, verify=self.verify
             ).json()
         ]
 
     @staticmethod
     def measurable_mapper(raw) -> HealthCheck:
-        return HealthCheck(
-            name=raw['measurable'],
-            status=HealthCheckStatus(round(float((raw['rate'])))),
-            node=raw['entity'],
-            timestamp=raw['timeStamp'],
-            seconds_ago=int(time.time() - raw['timeStamp']),
-            raw=raw,
-        ) if raw else None
+        return (
+            HealthCheck(
+                name=raw["measurable"],
+                status=HealthCheckStatus(round(float(raw["rate"]))),
+                node=raw["entity"],
+                timestamp=raw["timeStamp"],
+                seconds_ago=int(time.time() - raw["timeStamp"]),
+                raw=raw,
+            )
+            if raw
+            else None
+        )
 
 
 class Bright8(BrightBase):
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.base = "{0}/{1}/{2}".format(self.url, 'rest', 'v1')
+        self.base = "{}/{}/{}".format(self.url, "rest", "v1")
 
     def measurable(self, name):
-        base = "{0}/{1}".format(self.url, 'json')
-        params = {
-            'service': 'cmmon',
-            'call': 'getMonitoringMeasurable',
-            'arg': name
-        }
+        base = "{}/{}".format(self.url, "json")
+        params = {"service": "cmmon", "call": "getMonitoringMeasurable", "arg": name}
         return self._session.post(
-            url=base,
-            json=params,
-            verify=self.verify,
-            timeout=self.timeout
+            url=base, json=params, verify=self.verify, timeout=self.timeout
         ).json()
 
     def latest_measurable_data(self, measurable, entity=None) -> dict:
         params = {
-            'measurable': measurable,
-            **({'entity': entity} if entity is not None else {})
+            "measurable": measurable,
+            **({"entity": entity} if entity is not None else {}),
         }
 
         url = f"{self.base}/monitoring/latest?{urlencode(params)}"
-        return self._session.get(
-            url=url,
-            verify=self.verify,
-            timeout=self.timeout
-        ).json().get('data', [])
+        return (
+            self._session.get(url=url, verify=self.verify, timeout=self.timeout)
+            .json()
+            .get("data", [])
+        )
 
     @staticmethod
     def measurable_mapper(raw) -> HealthCheck:
-        return HealthCheck(
-            name=raw['measurable'],
-            status=HealthCheckStatus(raw['value']),
-            node=raw['entity'],
-            timestamp=raw['time'],
-            seconds_ago=int(raw['age']),
-            raw=raw,
-        ) if raw else None
+        return (
+            HealthCheck(
+                name=raw["measurable"],
+                status=HealthCheckStatus(raw["value"]),
+                node=raw["entity"],
+                timestamp=raw["time"],
+                seconds_ago=int(raw["age"]),
+                raw=raw,
+            )
+            if raw
+            else None
+        )
 
 
 class BrightAPI:
-
     def __init__(
-            self,
-            host=None,
-            port=443,
-            protocol='https',
-            basic_auth=(),
-            cert_auth=(),
-            version=None,
-            **kwargs
+        self,
+        host=None,
+        port=443,
+        protocol="https",
+        basic_auth=(),
+        cert_auth=(),
+        version=None,
+        **kwargs,
     ):
-        host = host or current_app.config['BRIGHT_COMPUTING_HOST']
-        port = port or current_app.config['BRIGHT_COMPUTING_PORT']
+        host = host or current_app.config["BRIGHT_COMPUTING_HOST"]
+        port = port or current_app.config["BRIGHT_COMPUTING_PORT"]
         url = f"{protocol}://{host}:{port}"
 
         if not basic_auth and not cert_auth:
-            cert = current_app.config['BRIGHT_COMPUTING_CERT_PATH']
-            key = current_app.config['BRIGHT_COMPUTING_KEY_PATH']
+            cert = current_app.config["BRIGHT_COMPUTING_CERT_PATH"]
+            key = current_app.config["BRIGHT_COMPUTING_KEY_PATH"]
 
             # handle relative paths
             if not os.path.isabs(cert) and not os.path.isabs(key):
@@ -238,10 +207,7 @@ class BrightAPI:
 
         self.version = version or Bright(url=url, **kwargs).version
         self.instance = self.factory(self.version)(
-            url=url,
-            basic_auth=basic_auth,
-            cert_auth=cert_auth,
-            **kwargs
+            url=url, basic_auth=basic_auth, cert_auth=cert_auth, **kwargs
         )
 
     @staticmethod
@@ -255,14 +221,17 @@ class BrightAPI:
         elif version == 8:
             return Bright8
         else:
-            raise ValueError('Unsupported version')
+            raise ValueError("Unsupported version")
 
     @staticmethod
     def supported_measurables():
-        return current_app.config['SUPPORTED_MEASURABLES']
+        return current_app.config["SUPPORTED_MEASURABLES"]
 
     def health_checks(self, node=None) -> typing.List[HealthCheck]:
-        checks = (self.health_check(key=measurable, node=node) for measurable in self.supported_measurables())
+        checks = (
+            self.health_check(key=measurable, node=node)
+            for measurable in self.supported_measurables()
+        )
         return list(filter(lambda x: x is not None, checks))
 
     def health_check(self, key, node=None) -> typing.Optional[HealthCheck]:
@@ -271,10 +240,9 @@ class BrightAPI:
             return None
 
         return self.measurable_mapper(
-            raw=next(iter(self.latest_measurable_data(
-                measurable=key,
-                entity=node
-            )), None)
+            raw=next(
+                iter(self.latest_measurable_data(measurable=key, entity=node)), None
+            )
         )
 
     def __getattr__(self, name):
