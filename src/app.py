@@ -15,7 +15,7 @@ from src.settings.env import config_class, load_dotenv
 db = SQLAlchemy()
 
 
-def create_app(config_name="development", dotenv=True, configs={}):
+def create_app(config_name="development", dotenv=True, configs=None):
     """Create a new app."""
 
     # define the WSGI application object
@@ -24,7 +24,7 @@ def create_app(config_name="development", dotenv=True, configs={}):
     # load object-based default configuration
     load_dotenv(dotenv)
     app.config.from_object(config_class(config_name))
-    app.config.update(configs)
+    app.config.update(configs or {})
 
     setup_app(app)
 
