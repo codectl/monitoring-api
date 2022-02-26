@@ -58,13 +58,17 @@ Note ⚠️: one should use ```configmap``` and ```secret``` instead when settin
 For a quick run with ```Flask```, run it like:
 
 ```bash
-$ flask run
+$ poetry run flask run
 ```
 
 Configure ```flask``` environments with environment variables or in ```.flaskenv``` file.
 
 ```Flask``` uses ```Werkzeug``` which is a WSGI library intended for development purposes. Do not use it in production!
 Therefore, for a production like environment, one should use instead a production server, like ```gunicorn```:
+
+```bash
+$ poetry run gunicorn src.app:create_app
+```
 
 ## Tests & linting 🚥
 
