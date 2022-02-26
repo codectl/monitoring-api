@@ -18,6 +18,7 @@ The project uses [poetry](https://python-poetry.org/) for dependency management,
 recommended):
 
 ```bash
+# ensure poetry is installed
 $ poetry env use python3
 $ poetry install
 ```
@@ -54,7 +55,16 @@ Note ⚠️: one should use ```configmap``` and ```secret``` instead when settin
 
 # Run 🚀
 
+For a quick run with ```Flask```, run it like:
 
+```bash
+$ flask run
+```
+
+Configure ```flask``` environments with environment variables or in ```.flaskenv``` file.
+
+```Flask``` uses ```Werkzeug``` which is a WSGI library intended for development purposes. Do not use it in production!
+Therefore, for a production like environment, one should use instead a production server, like ```gunicorn```:
 
 ## Tests & linting 🚥
 
