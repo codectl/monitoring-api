@@ -3,16 +3,11 @@ from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_plugins.webframeworks.flask import FlaskPlugin
 from flasgger import apispec_to_template, Swagger
 from flask import Blueprint, Flask, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
 
 from src import __meta__, __version__
 from src.resources.health_checks import blueprint as health_checks
 from src.settings import oas
 from src.settings.env import config_class, load_dotenv
-
-
-# SQLite database
-db = SQLAlchemy()
 
 
 def create_app(config_name="development", dotenv=True, configs=None):
