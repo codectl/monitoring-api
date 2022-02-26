@@ -38,7 +38,7 @@ A possible configuration is:
 
     # Application context
     APPLICATION_CONTEXT=/api/monitoring/v1
-    
+
     # version of OpenAPI
     OPENAPI=3.0.3
 
@@ -47,7 +47,7 @@ A possible configuration is:
     BRIGHT_COMPUTING_PORT=8081
     BRIGHT_COMPUTING_CERT_PATH=etc/ssl/bright/cert.pem
     BRIGHT_COMPUTING_KEY_PATH=etc/ssl/bright/cert.key
-    
+
     # Supported measurables
     SUPPORTED_MEASURABLES=foo,bar
 
