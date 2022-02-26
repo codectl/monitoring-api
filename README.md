@@ -35,6 +35,10 @@ particular useful during development stage.
 
 TODO
 
+:smiley:
+
+:python:
+
 ### Configuration 📄
 
 Since the project can read properties from the environment, one can use an ```.env``` file for application
