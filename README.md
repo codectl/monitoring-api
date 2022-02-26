@@ -62,7 +62,7 @@ A possible configuration is:
 
 Note ⚠️: one should use ```configmap``` and ```secret``` instead when setting it up with ```kubernetes```.
 
-# Run 🚀
+## Run 🚀
 
 For a quick run with ```Flask```, run it like:
 
