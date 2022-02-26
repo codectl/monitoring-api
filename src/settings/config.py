@@ -10,9 +10,6 @@ class BaseConfig:
     DEBUG = False
     TESTING = False
 
-    HOST = env.str("FLASK_RUN_HOST", "localhost")
-    PORT = env.int("FLASK_RUN_PORT", 5000)
-
     # Application root context
     APPLICATION_ROOT = env.str("APPLICATION_ROOT", "/")
 
