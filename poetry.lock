@@ -641,7 +641,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "22ca431218579be3657a72541f460472dbe6e5d4d49b3ae8e9b8ba38f172a5ef"
+content-hash = "0ae1ace55329e30303847fc63c22fa5b3d930f03218f22ac3a24e9a1dc52216f"
 
 [metadata.files]
 aenum = [
