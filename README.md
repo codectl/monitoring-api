@@ -7,7 +7,7 @@ A generic monitoring service meant to report on different metrics.
 * __health checks__: metrics that assess the status on different services and cluster components. These metrics are
   managed and provided by [Bright Computing](https://www.brightcomputing.com/).
 
-## Project setup
+## Project setup 🔧
 
 The application can run in several ways, depending on what the target platform is. One can run it directly on the system
 with```python``` or get it running on a ```kubernetes``` cluster.
@@ -25,7 +25,7 @@ $ poetry install
 That will configure a virtual environment for the project and install the respective dependencies. This approach is
 particular useful during development stage.
 
-### Configuration
+### Configuration 📄
 
 Since the project can read properties from the environment, one can use an ```.env``` file for application
 configurations. These should be set accordingly for a correct service usage.
@@ -52,8 +52,11 @@ A possible configuration is:
 
 Note ⚠️: one should use ```configmap``` and ```secret``` instead when setting it up with ```kubernetes```.
 
+# Run 🚀
 
-## Tests & linting
+
+
+## Tests & linting 🚥
 
 Run tests with ```tox```:
 
