@@ -25,6 +25,34 @@ $ poetry install
 That will configure a virtual environment for the project and install the respective dependencies. This approach is
 particular useful during development stage.
 
+### Configuration
+
+Since the project can read properties from the environment, one can use an ```.env``` file for application
+configurations. These should be set accordingly for a correct service usage.
+
+A possible configuration is:
+
+    # Database
+    SQLALCHEMY_DATABASE_URI=sqlite:///example.db
+
+    # Application context
+    APPLICATION_CONTEXT=/api/monitoring/v1
+    
+    # version of OpenAPI
+    OPENAPI=3.0.3
+
+    # Bright Computing properties
+    BRIGHT_COMPUTING_HOST=brightcomputing.com
+    BRIGHT_COMPUTING_PORT=8081
+    BRIGHT_COMPUTING_CERT_PATH=etc/ssl/bright/cert.pem
+    BRIGHT_COMPUTING_KEY_PATH=etc/ssl/bright/cert.key
+    
+    # Supported measurables
+    SUPPORTED_MEASURABLES=foo,bar
+
+Note ⚠️: one should use ```configmap``` and ```secret``` instead when setting it up with ```kubernetes```.
+
+
 ## Tests & linting
 
 Run tests with ```tox```:
