@@ -17,7 +17,7 @@ A generic monitoring service meant to report on different metrics.
 The application can run in several ways, depending on what the target platform is. One can run it directly on the system
 with```python``` or get it running on a ```kubernetes``` cluster.
 
-### Python <img src="https://github.com/buildkite/emojis/raw/main/img-buildkite-64/python.png" width="20">
+### Python <img src="https://github.com/buildkite/emojis/raw/main/img-buildkite-64/python.png" width="15">
 
 The project uses [poetry](https://python-poetry.org/) for dependency management, therefore to set up the project (
 recommended):
@@ -31,7 +31,7 @@ $ poetry install
 That will configure a virtual environment for the project and install the respective dependencies. This approach is
 particular useful during development stage.
 
-### Kubernetes <img src="https://github.com/buildkite/emojis/raw/main/img-buildkite-64/kubernetes.png" width="20">
+### Kubernetes <img src="https://github.com/buildkite/emojis/raw/main/img-buildkite-64/kubernetes.png" width="15">
 
 TODO
 
