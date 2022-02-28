@@ -10,6 +10,8 @@ repos:
       - id: check-json
       - id: check-toml
       - id: check-yaml
+        args:
+          - --allow-multiple-documents
       - id: pretty-format-json
         args:
           - --autofix
