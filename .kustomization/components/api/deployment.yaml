@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-api
+  labels:
+    app: monitoring-api
+    framework: flask
+  annotations:
+    a8r.io/description: API service for system monitoring metrics
+    a8r.io/owner: renatodamas
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: monitoring-api
+
+  strategy:
+    # Update each pod at a time and prevent
+    # additional pods from created
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 0
+
+  template:
+    metadata:
+      labels:
+        app: monitoring-api
+    spec:
+      containers:
+        - name: monitoring-api
+          image: monitoring-service:latest
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: proxy
+            - configMapRef:
+                name: monitoring-service
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+      serviceAccountName: monitoring-service
+      restartPolicy: Always
