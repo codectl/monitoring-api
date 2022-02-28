@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: monitoring-service
+data:
+
+  # application context
+  APPLICATION_ROOT: /api/monitoring/v1
+
+  # version of OpenAPI
+  OPENAPI: 3.0.3
