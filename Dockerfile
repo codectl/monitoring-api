@@ -35,4 +35,5 @@ USER 1000:1000
 
 # command to run on container start
 ARG env="production"
-CMD [ "gunicorn", "--bind", "0.0.0.0:5000", "src.app:create_app('${env}')" ]
+ENV ENV $env
+CMD gunicorn --bind 0.0.0.0:5000 "src.app:create_app('${ENV}')"
