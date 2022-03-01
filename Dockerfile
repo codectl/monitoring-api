@@ -13,7 +13,7 @@ RUN pip install --upgrade pip \
     && apt-get update \
     && apt install -y curl \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
-ENV PATH ${PATH}:/root/.poetry/bin
+ENV PATH=${PATH}:${HOME}/.local/bin
 
 # package & distribution
 COPY src/ pyproject.toml poetry.lock ./
