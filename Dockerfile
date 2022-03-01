@@ -18,8 +18,8 @@ ENV PATH=${PATH}:${HOME}/.local/bin
 # package & distribution
 COPY src/ pyproject.toml poetry.lock ./
 RUN python -m venv /venv
-RUN source /venv/bin/activate && poetry install --no-interaction --no-dev --no-root
-RUN source /venv/bin/activate && poetry build
+RUN . /venv/bin/activate && poetry install --no-interaction --no-dev --no-root
+RUN . /venv/bin/activate && poetry build
 
 FROM base
 
