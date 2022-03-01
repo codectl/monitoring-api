@@ -7,7 +7,7 @@ data:
 
   # Bright Computing properties
   BRIGHT_COMPUTING_HOST: localhost
-  BRIGHT_COMPUTING_PORT: 8081
+  BRIGHT_COMPUTING_PORT: "8080"
   BRIGHT_COMPUTING_CERT_PATH: etc/ssl/bright/cert.pem
   BRIGHT_COMPUTING_KEY_PATH: etc/ssl/bright/cert.key
 
