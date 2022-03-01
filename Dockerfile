@@ -26,6 +26,7 @@ RUN . /venv/bin/activate && poetry build
 
 FROM base
 
+COPY src/ src/
 COPY --from=builder /app/dist .
 RUN pip install *.whl
 
