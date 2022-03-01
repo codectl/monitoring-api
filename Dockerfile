@@ -4,13 +4,14 @@ ENV PYTHONFAULTHANDLER 1
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONHASHSEED random
 
+RUN pip install --upgrade pip
+
 WORKDIR /app
 
 FROM base as builder
 
 # install and setup poetry
-RUN pip install --upgrade pip \
-    && apt-get update \
+RUN apt update \
     && apt install -y curl \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
 ENV PATH=${PATH}:/root/.local/bin
