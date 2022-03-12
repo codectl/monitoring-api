@@ -11,7 +11,7 @@ def local_app():
         configs={
             "FLASK_RUN_HOST": "localhost",
             "FLASK_RUN_PORT": 5000,
-            "APPLICATION_ROOT": "/test/v2",
+            "APPLICATION_ROOT": "/test/v1",
         },
     )
     with app.app_context():
@@ -42,7 +42,7 @@ class TestApp:
         response = client.get("/", follow_redirects=True)
         request = response.request
         assert response.status_code == 200
-        assert request.path.rstrip("/") == "/test/v2"
+        assert request.path.rstrip("/") == "/test/v1"
 
-        response = client.get("/test/v2/swagger.json")
+        response = client.get("/test/v1/swagger.json")
         assert response.status_code == 200
