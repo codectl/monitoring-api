@@ -3,7 +3,7 @@ name = "monitoring-service"
 version = "0.1.0"
 description = "A service responsible for providing monitoring data."
 authors = ["Renato Teixeira <rena2damas@gmail.com>"]
-license = "MIT"
+license = "LICENSE"
 readme = "README.md"
 packages = [
     { include = "*", from = "src" }
