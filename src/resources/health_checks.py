@@ -74,6 +74,7 @@ class SupportedMeasurables(Resource):
                     application/json:
                         schema:
                             type: array
-                            items: HealthCheckSchema
+                            items:
+                                type: string
         """
         return jsonify(BrightAPI.supported_measurables())
