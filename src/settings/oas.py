@@ -19,7 +19,7 @@ class Server:
 
 @dataclass
 class HttpResponse:
-    code: str
+    code: int
     reason: str
     description: str
 
