@@ -19,7 +19,7 @@ A generic monitoring service meant to report on different metrics.
 
 Metrics:
 
-- **health checks**: metrics that assess the status on different services and cluster
+*  **health checks**: metrics that assess the status on different services and cluster
 components. These metrics are managed and provided by `Bright Computing
 <https://www.brightcomputing.com/>`_.
 
