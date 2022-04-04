@@ -51,8 +51,7 @@ def base_template(openapi_version, info=None, servers=(), tags=(), responses=())
         "tags": tags,
         "components": {
             "responses": {
-                response.reason: {
-                    "description": response.description,
+                response.reason.replace(" ", ""): {
                     "content": {
                         "application/json": {
                             "schema": {"$ref": "#/components/schemas/HttpResponse"}
