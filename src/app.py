@@ -1,10 +1,11 @@
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_plugins.webframeworks.flask import FlaskPlugin
-from flasgger import apispec_to_template, Swagger
+from apispec_ui.flask import Swagger
 from flask import Blueprint, Flask, redirect, url_for
+from werkzeug.exceptions import HTTPException
 
-from src import __meta__, __version__
+from src import __meta__, __version__, utils
 from src.resources.health_checks import blueprint as health_checks
 from src.settings import oas
 from src.settings.env import config_class, load_dotenv
@@ -38,6 +39,7 @@ def setup_app(app):
 
     # base template for OpenAPI specs
     oas.converter = oas.create_spec_converter(openapi_version)
+
     spec_template = oas.base_template(
         openapi_version=openapi_version,
         info={
@@ -53,7 +55,7 @@ def setup_app(app):
             )
         ],
         responses=[
-            oas.HttpResponse(code=404, reason="NotFound", description="Not Found")
+            utils.http_response(code=400, serialize=False),
         ],
     )
 
@@ -70,17 +72,14 @@ def setup_app(app):
     for view in app.view_functions.values():
         spec.path(view=view, app=app, base_path=url_prefix)
 
-    # generate swagger from spec
-    Swagger(
-        app=app,
-        config=oas.swagger_configs(
-            openapi_version=openapi_version, app_root=url_prefix
-        ),
-        template=apispec_to_template(app=app, spec=spec),
-        merge=True,
-    )
+    # create views for Swagger
+    Swagger(app=app, apispec=spec, config=oas.swagger_configs(app_root=url_prefix))
 
     # redirect root path to context root
-    app.add_url_rule(
-        "/", "index", view_func=lambda: redirect(url_for("flasgger.apidocs"))
+    app.add_url_rule("/", "index", view_func=lambda: redirect(url_for("swagger.ui")))
+
+    # jsonify http errors
+    app.register_error_handler(
+        HTTPException,
+        lambda ex: (utils.http_response(ex.code, exclude=("message",)), ex.code),
     )

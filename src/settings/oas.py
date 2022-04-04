@@ -4,6 +4,15 @@ from apispec.ext.marshmallow import OpenAPIConverter, resolver
 
 from src.schemas.serlializers.http import HttpResponseSchema
 
+__all__ = (
+    "Tag",
+    "Server",
+    "HttpResponse",
+    "create_spec_converter",
+    "base_template",
+    "swagger_configs",
+)
+
 
 @dataclass
 class Tag:
@@ -21,7 +30,7 @@ class Server:
 class HttpResponse:
     code: int
     reason: str
-    description: str
+    message: str = ""
 
 
 def create_spec_converter(openapi_version):
@@ -63,22 +72,12 @@ def base_template(openapi_version, info=None, servers=(), tags=(), responses=())
     }
 
 
-def swagger_configs(openapi_version, app_root=""):
+def swagger_configs(app_root="/"):
     prefix = "" if app_root == "/" else app_root
     return {
-        "openapi": openapi_version,
-        "specs": [
-            {
-                "endpoint": "swagger",
-                "route": prefix + "/swagger.json",
-                "rule_filter": lambda rule: True,
-                "model_filter": lambda tag: True,
-            }
-        ],
-        # where to find the docs (ensure trailing slash)
-        "specs_route": prefix + "/",
-        # swagger static files
-        "static_url_path": prefix + "/static",
-        # hide the Swagger top bar
-        "hide_top_bar": True,
+        "url_prefix": prefix,
+        "swagger_route": "/",
+        "swagger_static": "/static",
+        "swagger_favicon": "favicon.ico",
+        "swagger_hide_bar": True,
     }
