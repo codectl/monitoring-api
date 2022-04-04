@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "monitoring-service"
-version = "0.2.0"
+version = "0.2.1"
 description = "A service responsible for providing monitoring data."
 authors = ["Renato Teixeira <rena2damas@gmail.com>"]
 license = "LICENSE"
