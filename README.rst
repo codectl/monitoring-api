@@ -17,7 +17,7 @@ monitoring-service
 
 A generic monitoring service meant to report on different metrics.
 
-Metrics:
+**Metrics**
 
 *  **health checks**: metrics that assess the status on different services and cluster
    components. These metrics are managed and provided by `Bright Computing
