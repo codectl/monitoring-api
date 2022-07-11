@@ -5,15 +5,15 @@ from collections import namedtuple
 import pytest
 from requests_mock import ANY
 
-from src.services.bright import BrightAPI
-from src.models.bright import HealthCheck, HealthCheckStatus
 from src.api import health_checks
+from src.models.bright import HealthCheck, HealthCheckStatus
 from src.schemas.serlializers.bright import HealthCheckSchema
+from src.services.bright import BrightSvc
 
 
 @pytest.fixture(scope="class", params=(7, 8))
-def bright(request):
-    return BrightAPI(
+def svc(request):
+    return BrightSvc(
         host="localhost",
         port=80,
         protocol="http",
@@ -75,23 +75,23 @@ class TestHealthCheckAPI:
         assert response.status_code == 200
         assert response.json == ["foo", "bar"]
 
-    def test_no_health_checks(self, client, bright, mocker, requests_mock):
+    def test_no_health_checks(self, client, svc, mocker, requests_mock):
         """Ensure GET request retrieves health checks."""
-        matcher = re.compile(rf"{bright.url}.*")
+        matcher = re.compile(rf"{svc.url}.*")
         requests_mock.register_uri(ANY, matcher, json={})
-        mocker.patch.object(health_checks, "BrightAPI", return_value=bright)
+        mocker.patch.object(health_checks, "BrightSvc", return_value=svc)
 
         response = client.get("/health-checks")
         assert response.status_code == 200
         assert response.json == []
 
-    def test_valid_health_checks(self, client, bright, mocker):
+    def test_valid_health_checks(self, client, svc, mocker):
         """Ensure GET request retrieves valid health checks."""
-        mocker.patch.object(health_checks, "BrightAPI", return_value=bright)
+        mocker.patch.object(health_checks, "BrightSvc", return_value=svc)
         mocker.patch.object(
-            bright.instance,
+            svc.instance,
             "latest_measurable_data",
-            side_effect=measurable_data(bright.version),
+            side_effect=measurable_data(svc.version),
         )
         mocker.patch.object(time, "time", return_value=0)
         expected = HealthCheckSchema(many=True).dump(
@@ -117,13 +117,13 @@ class TestHealthCheckAPI:
         assert response.status_code == 200
         assert response.json == expected
 
-    def test_get_health_check_by_id(self, client, bright, mocker):
+    def test_get_health_check_by_id(self, client, svc, mocker):
         """Ensure GET request retrieves an health check by id."""
-        mocker.patch.object(health_checks, "BrightAPI", return_value=bright)
+        mocker.patch.object(health_checks, "BrightSvc", return_value=svc)
         mocker.patch.object(
-            bright.instance,
+            svc.instance,
             "latest_measurable_data",
-            side_effect=measurable_data(bright.version),
+            side_effect=measurable_data(svc.version),
         )
         mocker.patch.object(time, "time", return_value=0)
         expected = HealthCheckSchema().dump(
@@ -140,9 +140,9 @@ class TestHealthCheckAPI:
         assert response.status_code == 200
         assert response.json == expected
 
-    def test_get_missing_health_check(self, client, bright, mocker):
+    def test_get_missing_health_check(self, client, svc, mocker):
         """Ensure GET request cannot retrieve an health check by id."""
-        mocker.patch.object(health_checks, "BrightAPI", return_value=bright)
+        mocker.patch.object(health_checks, "BrightSvc", return_value=svc)
 
         response = client.get("/health-checks/unsupported")
         assert response.status_code == 404
