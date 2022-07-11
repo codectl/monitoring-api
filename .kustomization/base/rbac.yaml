@@ -2,21 +2,21 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: monitoring-service
+  name: monitoring-api
 rules:
   - apiGroups: [ policy ]
     resources: [ podsecuritypolicies ]
     verbs: [ use ]
-    resourceNames: [ monitoring-service ]
+    resourceNames: [ monitoring-api ]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: monitoring-service
+  name: monitoring-api
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: monitoring-service
+  name: monitoring-api
 subjects:
   - kind: ServiceAccount
-    name: monitoring-service
+    name: monitoring-api

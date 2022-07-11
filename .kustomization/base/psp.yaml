@@ -2,9 +2,9 @@
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: monitoring-service
+  name: monitoring-api
   annotations:
-    kubernetes.io/description: psp for monitoring service
+    kubernetes.io/description: PSP for monitoring API
     seccomp.security.alpha.kubernetes.io/allowedProfileNames: runtime/default
     seccomp.security.alpha.kubernetes.io/defaultProfileName: runtime/default
 spec:

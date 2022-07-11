@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: monitoring-service
+  name: monitoring-api
 data:
 
   # Bright Computing properties

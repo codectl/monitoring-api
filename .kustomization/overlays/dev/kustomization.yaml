@@ -12,6 +12,6 @@ components:
   - ingress/
 
 images:
-  - name: monitoring-service
+  - name: monitoring-api
     newName: ...
     newTag: latest
