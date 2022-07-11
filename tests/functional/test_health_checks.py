@@ -5,9 +5,9 @@ from collections import namedtuple
 import pytest
 from requests_mock import ANY
 
-from src.api.bright import BrightAPI
+from src.services.bright import BrightAPI
 from src.models.bright import HealthCheck, HealthCheckStatus
-from src.resources import health_checks
+from src.api import health_checks
 from src.schemas.serlializers.bright import HealthCheckSchema
 
 

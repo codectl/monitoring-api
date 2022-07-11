@@ -3,7 +3,7 @@ import time
 
 import pytest
 
-from src.api.bright import BrightAPI
+from src.services.bright import BrightAPI
 from src.models.bright import HealthCheck, HealthCheckStatus
 
 
