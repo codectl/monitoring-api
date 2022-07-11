@@ -1,12 +1,12 @@
-******************
-monitoring-service
-******************
+**************
+monitoring-api
+**************
 
-.. image:: https://github.com/rena2damas/monitoring-service/actions/workflows/ci.yaml/badge.svg
-    :target: https://github.com/rena2damas/monitoring-service/actions/workflows/ci.yaml
+.. image:: https://github.com/rena2damas/monitoring-api/actions/workflows/ci.yaml/badge.svg
+    :target: https://github.com/rena2damas/monitoring-api/actions/workflows/ci.yaml
     :alt: CI
-.. image:: https://codecov.io/gh/rena2damas/monitoring-service/branch/master/graph/badge.svg
-    :target: https://app.codecov.io/gh/rena2damas/monitoring-service/branch/master
+.. image:: https://codecov.io/gh/rena2damas/monitoring-api/branch/master/graph/badge.svg
+    :target: https://app.codecov.io/gh/rena2damas/monitoring-api/branch/master
     :alt: codecov
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
