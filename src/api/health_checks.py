@@ -4,11 +4,11 @@ from flask_restful import abort, Api, Resource
 from src.services.bright import BrightSvc
 from src.schemas.serlializers.bright import HealthCheckSchema
 
-blueprint = Blueprint("health-checks", __name__, url_prefix="health-checks")
+blueprint = Blueprint("health-checks", __name__, url_prefix="/health-checks")
 api = Api(blueprint)
 
 
-@api.resource("/", endpoint="health-checks")
+@api.resource("", endpoint="health-checks")
 class HealthChecks(Resource):
     def get(self):
         """
@@ -53,9 +53,10 @@ class HealthCheck(Resource):
             404:
                 $ref: '#/components/responses/NotFound'
         """
-        if key not in BrightSvc.supported_measurables():
+        svc = BrightSvc(verify=False)
+        if key not in svc.supported_measurables():
             abort(404, code=404, reason="Not Found")
-        data = BrightSvc(verify=False).health_check(key=key)
+        data = svc.health_check(key=key)
         return HealthCheckSchema().dump(data)
 
 
