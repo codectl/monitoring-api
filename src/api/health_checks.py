@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_restful import abort, Api, Resource
 
-from src.services.bright import BrightAPI
+from src.services.bright import BrightSvc
 from src.schemas.serlializers.bright import HealthCheckSchema
 
 blueprint = Blueprint("health-checks", __name__, url_prefix="health-checks")
@@ -25,8 +25,8 @@ class HealthChecks(Resource):
                             type: array
                             items: HealthCheckSchema
         """
-        health_checks = BrightAPI(verify=False).health_checks()
-        return HealthCheckSchema(many=True).dump(health_checks)
+        data = BrightSvc(verify=False).health_checks()
+        return HealthCheckSchema(many=True).dump(data)
 
 
 @api.resource("/<key>", endpoint="health-check")
@@ -53,10 +53,10 @@ class HealthCheck(Resource):
             404:
                 $ref: '#/components/responses/NotFound'
         """
-        if key not in BrightAPI().supported_measurables():
+        if key not in BrightSvc.supported_measurables():
             abort(404, code=404, reason="Not Found")
-        health_check = BrightAPI(verify=False).health_check(key=key)
-        return HealthCheckSchema().dump(health_check)
+        data = BrightSvc(verify=False).health_check(key=key)
+        return HealthCheckSchema().dump(data)
 
 
 @api.resource("/supported-measurables", endpoint="supported-measurables")
@@ -77,4 +77,4 @@ class SupportedMeasurables(Resource):
                             items:
                                 type: string
         """
-        return jsonify(BrightAPI.supported_measurables())
+        return jsonify(BrightSvc.supported_measurables())
