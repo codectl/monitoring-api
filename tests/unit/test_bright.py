@@ -3,13 +3,13 @@ import time
 
 import pytest
 
-from src.services.bright import BrightAPI
+from src.services.bright import BrightSvc
 from src.models.bright import HealthCheck, HealthCheckStatus
 
 
 @pytest.fixture(scope="class", params=(7, 8))
 def bright_http(request):
-    return BrightAPI(
+    return BrightSvc(
         host="localhost",
         port=80,
         protocol="http",
@@ -20,7 +20,7 @@ def bright_http(request):
 
 @pytest.fixture(scope="class", params=(7, 8))
 def bright_https(request):
-    return BrightAPI(
+    return BrightSvc(
         host="www.localhost",
         port=443,
         protocol="https",
@@ -29,7 +29,7 @@ def bright_https(request):
     )
 
 
-class TestBrightAPI:
+class TestBrightSvc:
     def test_bright_url(self, bright_http, bright_https):
         assert bright_http.url == "http://localhost:80"
         assert bright_https.url == "https://www.localhost:443"
@@ -39,24 +39,22 @@ class TestBrightAPI:
 
     @pytest.mark.parametrize("version", (7, 8))
     def test_bright_with_cert_auth(self, version):
-        bright = BrightAPI(
-            host="localhost", cert_auth=("cert", "file"), version=version
-        )
-        assert bright._session.cert == ("cert", "file")
+        svc = BrightSvc(host="localhost", cert_auth=("cert", "file"), version=version)
+        assert svc._session.cert == ("cert", "file")
 
     @pytest.mark.parametrize("version", (7, 8, 7.2, 8.2, "7.2", "8.2"))
     def test_bright_default_version(self, version, requests_mock):
         matcher = re.compile(r"localhost.*")
         requests_mock.register_uri("POST", matcher, json={"cmVersion": version})
-        bright = BrightAPI(host="localhost", cert_auth=("cert", "file"))
+        svc = BrightSvc(host="localhost", cert_auth=("cert", "file"))
         major_version = int(float(version))
-        assert bright.version == version
-        assert type(bright.instance).__name__ == f"Bright{major_version}"
+        assert svc.version == version
+        assert type(svc.instance).__name__ == f"Bright{major_version}"
 
     @pytest.mark.parametrize("value", ("PASS", "FAIL", "UNKNOWN"))
     def test_bright8_health_check(self, value, mocker, requests_mock):
-        bright = BrightAPI(host="localhost", basic_auth=("user", "pass"), version=8)
-        mocker.patch.object(bright, "supported_measurables", return_value=["foo"])
+        svc = BrightSvc(host="localhost", basic_auth=("user", "pass"), version=8)
+        mocker.patch.object(svc, "supported_measurables", return_value=["foo"])
         data = {
             "data": [
                 {
@@ -68,7 +66,7 @@ class TestBrightAPI:
                 }
             ]
         }
-        matcher = re.compile(rf"{bright.url}.*")
+        matcher = re.compile(rf"{svc.url}.*")
         requests_mock.register_uri("GET", matcher, json=data)
         expected = HealthCheck(
             name="foo",
@@ -79,17 +77,15 @@ class TestBrightAPI:
             raw=data["data"][0],
         )
 
-        health_check = bright.health_check("foo")
+        health_check = svc.health_check("foo")
         assert health_check == expected
 
     @pytest.mark.parametrize("rate", (0, 0.0, 1, 1.0, 2, 2.0))
     def test_bright7_health_check(self, rate, mocker, requests_mock):
-        bright = BrightAPI(host="localhost", basic_auth=("user", "pass"), version=7)
-        mocker.patch.object(bright, "supported_measurables", return_value=["foo"])
-        mocker.patch.object(
-            bright.instance, "measurable", return_value={"uniqueKey": 1}
-        )
-        mocker.patch.object(bright.instance, "entity", return_value={"uniqueKey": 1})
+        svc = BrightSvc(host="localhost", basic_auth=("user", "pass"), version=7)
+        mocker.patch.object(svc, "supported_measurables", return_value=["foo"])
+        mocker.patch.object(svc.instance, "measurable", return_value={"uniqueKey": 1})
+        mocker.patch.object(svc.instance, "entity", return_value={"uniqueKey": 1})
         mocker.patch.object(time, "time", return_value=0)
         data = [
             {
@@ -101,7 +97,7 @@ class TestBrightAPI:
                 "uniqueKey": 1,
             }
         ]
-        matcher = re.compile(rf"{bright.url}.*")
+        matcher = re.compile(rf"{svc.url}.*")
         requests_mock.register_uri("POST", matcher, json=data)
         expected = HealthCheck(
             name="foo",
@@ -112,13 +108,11 @@ class TestBrightAPI:
             raw={**data[0], "measurable": "foo", "entity": "foo_node"},
         )
 
-        health_check = bright.health_check("foo", node="foo_node")
+        health_check = svc.health_check("foo", node="foo_node")
         assert health_check == expected
 
     @pytest.mark.parametrize("version", (7, 8))
     def test_unsupported_health_check(self, version, mocker):
-        bright = BrightAPI(
-            host="localhost", basic_auth=("user", "pass"), version=version
-        )
-        mocker.patch.object(bright, "supported_measurables", return_value=["foo"])
-        assert bright.health_check(key="bar") is None
+        svc = BrightSvc(host="localhost", basic_auth=("user", "pass"), version=version)
+        mocker.patch.object(svc, "supported_measurables", return_value=["foo"])
+        assert svc.health_check(key="bar") is None
