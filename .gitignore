@@ -43,11 +43,13 @@ coverage.xml
 # Environments
 .env
 .venv
+.flaskenv
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+
 
 # database files
 *.db
