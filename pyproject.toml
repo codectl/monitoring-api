@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "monitoring-service"
+name = "monitoring-api"
 version = "0.2.1"
 description = "A service responsible for providing monitoring data."
 authors = ["Renato Teixeira <rena2damas@gmail.com>"]
@@ -9,7 +9,7 @@ packages = [
     { include = "*", from = "src" }
 ]
 homepage = ""
-repository = "https://github.com/rena2damas/monitoring-service"
+repository = "https://github.com/rena2damas/monitoring-api"
 documentation = ""
 keywords = [
     "monitoring",
