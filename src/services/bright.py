@@ -9,7 +9,7 @@ from urllib.parse import urlencode
 
 from src.models.bright import HealthCheck, HealthCheckStatus
 
-__all__ = ("BrightAPI",)
+__all__ = ("BrightSvc",)
 
 
 class BrightBase(abc.ABC):
