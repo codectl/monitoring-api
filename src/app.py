@@ -6,7 +6,7 @@ from flask import Blueprint, Flask, redirect, url_for
 from werkzeug.exceptions import HTTPException
 
 from src import __meta__, __version__, utils
-from src.resources.health_checks import blueprint as health_checks
+from src.api.health_checks import blueprint as health_checks
 from src.settings import oas
 from src.settings.env import config_class, load_dotenv
 

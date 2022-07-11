@@ -181,7 +181,7 @@ class Bright8(BrightBase):
         )
 
 
-class BrightAPI:
+class BrightSvc:
     def __init__(
         self,
         host=None,
