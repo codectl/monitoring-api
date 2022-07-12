@@ -231,7 +231,7 @@ class BrightSvc:
             self.health_check(key=measurable, node=node)
             for measurable in self.supported_measurables()
         )
-        return list(filter(lambda x: x is not None, checks))
+        return [x for x in checks if x is not None]
 
     def health_check(self, key, node=None) -> typing.Optional[HealthCheck]:
         """Get translated measurable to a health check."""
