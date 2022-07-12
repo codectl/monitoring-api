@@ -226,7 +226,7 @@ class BrightSvc:
     def supported_measurables():
         return current_app.config["SUPPORTED_MEASURABLES"]
 
-    def health_checks(self, node=None) -> typing.List[HealthCheck]:
+    def health_checks(self, node=None) -> list[HealthCheck]:
         checks = (
             self.health_check(key=measurable, node=node)
             for measurable in self.supported_measurables()
