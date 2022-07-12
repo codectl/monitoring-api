@@ -2,6 +2,12 @@
 CHANGELOG
 *********
 
+0.2.2 (2022-06-12)
+-----
+
+* Fixed unit & integrated tests
+* Standardized code
+
 0.2.1 (2022-04-04)
 -----
 
