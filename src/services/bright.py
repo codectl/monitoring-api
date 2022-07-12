@@ -238,11 +238,9 @@ class BrightSvc:
         if key not in self.supported_measurables():
             return None
 
-        return self.measurable_mapper(
-            raw=next(
-                iter(self.latest_measurable_data(measurable=key, entity=node)), None
-            )
-        )
+        data = self.latest_measurable_data(measurable=key, entity=node)
+        measurable = next(iter(data), None)
+        return self.measurable_mapper(raw=measurable)
 
     def __getattr__(self, name):
         return self.instance.__getattribute__(name)
