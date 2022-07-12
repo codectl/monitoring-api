@@ -106,11 +106,11 @@ class Bright7(BrightBase):
             url=self.base, json=params, verify=self.verify, timeout=self.timeout
         ).json()
 
-    def latest_measurable_data(self, measurable, entity) -> dict:
+    def latest_measurable_data(self, measurable, entity) -> list[dict]:
         measurable_id = self.measurable(measurable).get("uniqueKey")
         entity_id = self.entity(entity).get("uniqueKey")
         if not entity_id or not measurable_id:
-            return {}
+            return []
 
         params = {
             "service": "cmmon",
@@ -152,7 +152,7 @@ class Bright8(BrightBase):
             url=base, json=params, verify=self.verify, timeout=self.timeout
         ).json()
 
-    def latest_measurable_data(self, measurable, entity=None) -> dict:
+    def latest_measurable_data(self, measurable, entity=None) -> list[dict]:
         params = {
             "measurable": measurable,
             **({"entity": entity} if entity is not None else {}),
