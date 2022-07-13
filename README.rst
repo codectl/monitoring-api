@@ -25,14 +25,12 @@ A generic monitoring service meant to report on different metrics.
 
 Setup 🔧
 =====
-
 The application can run in several ways, depending on what the target platform is.
 One can run it directly on the system with ``python``` or get it running on a
 ``kubernetes`` cluster.
 
 Python
 ------
-
 The project uses `poetry <https://python-poetry.org/>`_ for dependency management
 . Therefore to set up the project (recommended):
 
@@ -47,12 +45,10 @@ dependencies, which is particular useful during development stage.
 
 Kubernetes
 ----------
-
 Refer to `README <.kustomization/README.rst>`_ under ``.kustomization/``.
 
 Configuration 📄
 -------------
-
 Since the project can read properties from the environment, one can use an ``.env``
 file for application configurations. These should be set accordingly for a correct
 service usage.
@@ -84,7 +80,6 @@ Note ⚠️: one should use ``configmap`` and ``secret`` instead when configurin
 
 Run 🚀
 ====
-
 For a quick run with ``Flask``, run it like:
 
 .. code-block:: bash
@@ -103,7 +98,6 @@ use instead a production server, like ``gunicorn``:
 
 Tests & linting 🚥
 ===============
-
 Run tests with ``tox``:
 
 .. code-block:: bash
@@ -125,5 +119,4 @@ Optionally, run coverage as well with:
 
 License
 =======
-
 MIT licensed. See `LICENSE <LICENSE>`_.
