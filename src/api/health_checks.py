@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify
 from flask_restful import abort, Api, Resource
 
 from src.services.bright import BrightSvc
-from src.schemas.serlializers.bright import HealthCheckSchema
+from src.schemas.serializers.bright import HealthCheckSchema
 
 blueprint = Blueprint("health-checks", __name__, url_prefix="/health-checks")
 api = Api(blueprint)
