@@ -7,7 +7,7 @@ from requests_mock import ANY
 
 from src.api import health_checks
 from src.models.bright import HealthCheck, HealthCheckStatus
-from src.schemas.serlializers.bright import HealthCheckSchema
+from src.schemas.serializers.bright import HealthCheckSchema
 from src.services.bright import BrightSvc
 
 
