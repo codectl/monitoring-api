@@ -6,7 +6,7 @@ on:
     types: [ published ]
 
 jobs:
-  docker:
+  dockerhub:
     runs-on: ubuntu-latest
     steps:
 
@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: build and push
+      - name: build & push
         uses: docker/build-push-action@v3
         with:
           push: true
