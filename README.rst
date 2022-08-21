@@ -21,7 +21,7 @@ A generic monitoring service meant to report on different metrics.
 
 * **health checks**: metrics that assess the status on different services and cluster
   components. These metrics are managed and provided by `Bright Computing
-  <https://www.brightcomputing.com/>`_.
+  <https://www.brightcomputing.com/>`__.
 
 Setup 🔧
 =====
@@ -31,7 +31,7 @@ One can run it directly on the system with ``python``` or get it running on a
 
 Python
 ------
-The project uses `poetry <https://python-poetry.org/>`_ for dependency management
+The project uses `poetry <https://python-poetry.org/>`__ for dependency management
 . Therefore to set up the project (recommended):
 
 .. code-block:: bash
@@ -45,7 +45,7 @@ dependencies, which is particular useful during development stage.
 
 Kubernetes
 ----------
-Refer to `README <.kustomization/README.rst>`_ under ``.kustomization/``.
+Refer to `README <.kustomization/README.rst>`__ under ``.kustomization/``.
 
 Configuration 📄
 -------------
@@ -119,4 +119,4 @@ Optionally, run coverage as well with:
 
 License
 =======
-MIT licensed. See `LICENSE <LICENSE>`_.
+MIT licensed. See `LICENSE <LICENSE>`__.
