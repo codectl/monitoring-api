@@ -2,6 +2,9 @@
 monitoring-api
 **************
 
+.. image:: https://img.shields.io/docker/v/renatodamas/monitoring-api?logo=docker
+    :target: https://hub.docker.com/repository/docker/renatodamas/filesystem-api
+    :alt: docker
 .. image:: https://github.com/rena2damas/monitoring-api/actions/workflows/ci.yaml/badge.svg
     :target: https://github.com/rena2damas/monitoring-api/actions/workflows/ci.yaml
     :alt: CI
