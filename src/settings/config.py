@@ -13,6 +13,9 @@ class BaseConfig:
     # Application root context
     APPLICATION_ROOT = env.str("APPLICATION_ROOT", "/")
 
+    # OpenAPI supported version
+    OPENAPI = env("OPENAPI", "3.0.3")
+
     # Bright Computing properties
     BRIGHT_COMPUTING_HOST = env.str("BRIGHT_COMPUTING_HOST", "localhost")
     BRIGHT_COMPUTING_PORT = env.int("BRIGHT_COMPUTING_PORT", 8080)
@@ -25,9 +28,6 @@ class BaseConfig:
 
     # List of supported measurables
     SUPPORTED_MEASURABLES = env.list("SUPPORTED_MEASURABLES", [])
-
-    # OpenAPI supported version
-    OPENAPI = env("OPENAPI", "3.0.3")
 
 
 @dataclass
