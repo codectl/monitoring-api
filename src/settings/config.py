@@ -26,7 +26,7 @@ class BaseConfig:
     # List of supported measurables
     SUPPORTED_MEASURABLES = env.list("SUPPORTED_MEASURABLES", [])
 
-    # OPENAPI supported version
+    # OpenAPI supported version
     OPENAPI = env("OPENAPI", "3.0.3")
 
 
