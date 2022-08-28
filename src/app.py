@@ -2,12 +2,12 @@ from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_plugins.webframeworks.flask import FlaskPlugin
 from apispec_ui.flask import Swagger
-from flask import Blueprint, Flask, redirect, url_for
-from werkzeug.exceptions import HTTPException
+from flask import Blueprint, Flask
 
 from src import __meta__, __version__, utils
 from src.api.health_checks import blueprint as health_checks
 from src.settings import oas
+from src.settings.ctx import ctx_settings
 from src.settings.env import config_class, load_dotenv
 
 
@@ -75,11 +75,5 @@ def setup_app(app):
     # create views for Swagger
     Swagger(app=app, apispec=spec, config=oas.swagger_configs(app_root=url_prefix))
 
-    # redirect root path to context root
-    app.add_url_rule("/", "index", view_func=lambda: redirect(url_for("swagger.ui")))
-
-    # jsonify http errors
-    app.register_error_handler(
-        HTTPException,
-        lambda ex: (utils.http_response(ex.code, exclude=("message",)), ex.code),
-    )
+    # settings within app ctx
+    ctx_settings(app)
