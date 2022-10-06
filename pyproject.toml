@@ -48,7 +48,7 @@ requests = "^2.28.1"
 coverage = "^6.5"
 pre-commit = "^2.19.0"
 pytest = "^7.1.2"
-pytest-mock = "^3.9.0"
+pytest-mock = "^3.10.0"
 requests-mock = "^1.10.0"
 
 [build-system]
