@@ -6,7 +6,7 @@ from apispec_plugins.webframeworks.flask import FlaskPlugin
 from apispec_ui.flask import Swagger
 from flask import Blueprint, Flask
 
-from src import __meta__, __version__, utils
+from src import __meta__, __version__
 from src.api.health_checks import blueprint as health_checks
 from src.settings import oas
 from src.settings.ctx import ctx_settings
