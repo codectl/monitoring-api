@@ -46,7 +46,7 @@ requests = "^2.28.2"
 
 [tool.poetry.dev-dependencies]
 coverage = "^6.5"
-pre-commit = "^2.19.0"
+pre-commit = "^2.21.0"
 pytest = "^7.2.1"
 pytest-mock = "^3.10.0"
 requests-mock = "^1.10.0"
