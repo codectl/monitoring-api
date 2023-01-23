@@ -51,7 +51,6 @@ class HealthCheck(Resource):
                     application/json:
                         schema: HealthCheckSchema
             404:
-                $ref: '#/components/responses/NotFound'
         """
         svc = BrightSvc(verify=False)
         if key not in svc.supported_measurables():
