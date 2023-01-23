@@ -27,7 +27,7 @@ A generic monitoring service meant to report on different metrics.
   <https://www.brightcomputing.com/>`__.
 
 Setup 🔧
-=====
+========
 The application can run in several ways, depending on what the target platform is.
 One can run it directly on the system with ``python``` or get it running on a
 ``kubernetes`` cluster.
@@ -51,7 +51,7 @@ Kubernetes
 Refer to `README <.kustomization/README.rst>`__ under ``.kustomization/``.
 
 Configuration 📄
--------------
+----------------
 Since the project can read properties from the environment, one can use an ``.env``
 file for application configurations. These should be set accordingly for a correct
 service usage.
@@ -82,7 +82,7 @@ Note ⚠️: one should use ``configmap`` and ``secret`` instead when configurin
 ``kubernetes``.
 
 Run 🚀
-====
+======
 For a quick run with ``Flask``, run it like:
 
 .. code-block:: bash
@@ -100,7 +100,7 @@ use instead a production server, like ``gunicorn``:
     $ poetry run gunicorn src.app:create_app
 
 Tests & linting 🚥
-===============
+==================
 Run tests with ``tox``:
 
 .. code-block:: bash
