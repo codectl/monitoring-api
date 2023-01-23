@@ -39,9 +39,6 @@ def setup_app(app):
     index.register_blueprint(health_checks)
     app.register_blueprint(index, url_prefix=url_prefix)
 
-    # base template for OpenAPI specs
-    oas.converter = oas.create_spec_converter(openapi_version)
-
     spec_template = base_template(
         openapi_version=openapi_version,
         info={

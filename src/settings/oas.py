@@ -1,21 +1,4 @@
-from dataclasses import dataclass
-
-from apispec.ext.marshmallow import OpenAPIConverter, resolver
-
-from src.schemas.serializers.http import HttpResponseSchema
-
-__all__ = (
-    "create_spec_converter",
-    "swagger_configs",
-)
-
-
-def create_spec_converter(openapi_version):
-    return OpenAPIConverter(
-        openapi_version=openapi_version,
-        schema_name_resolver=lambda schema: None,
-        spec=None,
-    )
+__all__ = ("swagger_configs",)
 
 
 def swagger_configs(app_root="/"):
