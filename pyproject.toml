@@ -38,7 +38,7 @@ apispec = { extras = ["marshmallow", "yaml"], version = "^6.3.0" }
 apispec-plugins = "^0.2.0"
 apispec-ui = "^0.1.4"
 environs = "^9.5.0"
-Flask = "^2.2.3"
+Flask = "^2.2.5"
 Flask-RESTful = "^0.3.10"
 gunicorn = "^20.1.0"
 python = "^3.7"
