@@ -2,14 +2,14 @@
 
 [[package]]
 name = "aenum"
-version = "3.1.12"
+version = "3.1.14"
 description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants"
 optional = false
 python-versions = "*"
 files = [
-    {file = "aenum-3.1.12-py2-none-any.whl", hash = "sha256:8d79c9e3ec997220e355b96b322e672fb56a53e61744138ed838407e3a07b610"},
-    {file = "aenum-3.1.12-py3-none-any.whl", hash = "sha256:2d544ef7323c088d68abf9a84b9f3f6db0d516fec685e15678b5f84fdb7b8ba0"},
-    {file = "aenum-3.1.12.tar.gz", hash = "sha256:3e531c91860a81f885f7e6e97d219ae9772cb899580084788935dad7d9742ef0"},
+    {file = "aenum-3.1.14-py2-none-any.whl", hash = "sha256:93ba417f1c461d2aab6d107204110381d1b3e53561193ae53df3a17701821777"},
+    {file = "aenum-3.1.14-py3-none-any.whl", hash = "sha256:1d60e15f2e2d4ba66371c19c691edb085ecf82027e773309a9c4291b5cbccc17"},
+    {file = "aenum-3.1.14.tar.gz", hash = "sha256:7c4b04b5c9621533d6311e6ca23ea2ee213c7a992ed0be79a2b944cdaf2a45ec"},
 ]
 
 [[package]]
@@ -943,4 +943,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "83c7a1d96984db73748aacee4ef452133bd4ac1d1a9599e053270bd7e662be2d"
+content-hash = "193ecc2a8e7744afb7d9c7e035ad6cf050aa1782cb7d24e38774f1ad29b65518"
